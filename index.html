@@ -564,6 +564,8 @@ ar:{
   totalUsers:'إجمالي المستخدمين', pendingUsers:'قيد المراجعة', activeUsers:'مفعّلون',
   disabledUsers:'معطّلون', activate:'تفعيل', disable:'تعطيل', setPending:'إرجاع للمراجعة',
   userDetails:'بيانات المستخدم', joined:'تاريخ التسجيل', lastLogin:'آخر دخول', viewWorkspace:'عرض مساحة العمل',
+  accessDuration:'مدة الوصول', noExpiry:'بدون انتهاء', oneWeek:'أسبوع', oneMonth:'شهر', threeMonths:'3 أشهر',
+  sixMonths:'6 أشهر', oneYear:'سنة', customDate:'تاريخ محدد', expiresOn:'ينتهي في', expired:'منتهي', activateFor:'تفعيل لمدة',
   /* ai */
   aiTitle:'مساعد المشاريع', aiSub:'يقرأ بياناتك فقط',
   aiPlaceholder:'اسأل عن مشاريعك…',
@@ -657,6 +659,8 @@ en:{
   totalUsers:'Total users', pendingUsers:'Pending', activeUsers:'Active',
   disabledUsers:'Disabled', activate:'Activate', disable:'Disable', setPending:'Set pending',
   userDetails:'User details', joined:'Joined', lastLogin:'Last login', viewWorkspace:'View workspace',
+  accessDuration:'Access duration', noExpiry:'No expiry', oneWeek:'1 week', oneMonth:'1 month', threeMonths:'3 months',
+  sixMonths:'6 months', oneYear:'1 year', customDate:'Custom date', expiresOn:'Expires on', expired:'Expired', activateFor:'Activate for',
   aiTitle:'Project assistant', aiSub:'Reads only your data',
   aiPlaceholder:'Ask about your projects…',
   aiWelcome:'I answer from your real project data. Try:',
@@ -2174,7 +2178,7 @@ VIEWS.admin = async (v)=>{
   if(!S.profile.is_admin){ v.innerHTML=emptyState(T('noData'),''); return; }
   const [stats, users] = await Promise.all([
     DB.rpc('admin_stats'),
-    DB.select('profiles','select=*&order=created_at.desc')
+    DB.select('v_admin_users','select=*&order=created_at.desc')
   ]);
   const kpi=(l,val,c)=>`<div class="kpi" style="--k:${c}"><div class="kpi-label">${l}</div><div class="kpi-value">${val}</div></div>`;
   v.innerHTML=`<div class="stack">
@@ -2192,33 +2196,36 @@ VIEWS.admin = async (v)=>{
           <option value="">${T('all')}</option>
           <option value="pending">${T('pendingUsers')}</option>
           <option value="active">${T('activeUsers')}</option>
+          <option value="expired">${T('expired')}</option>
           <option value="disabled">${T('disabledUsers')}</option></select></div>
       <div class="tbl-wrap"><table class="tbl">
         <thead><tr><th>${T('fullName')}</th><th>${T('email')}</th><th>${T('status')}</th>
-          <th>${T('joined')}</th><th>${T('lastLogin')}</th><th></th></tr></thead>
+          <th>${T('expiresOn')}</th><th>${T('joined')}</th><th>${T('lastLogin')}</th><th></th></tr></thead>
         <tbody id="aBody"></tbody></table></div>
     </div></div>`;
 
   const draw=()=>{
     const f=$('#aFilter').value;
-    const rows=users.filter(u=>!f||u.status===f);
+    const rows=users.filter(u=>!f||u.effective_status===f);
     $('#aBody').innerHTML=rows.map(u=>`<tr>
       <td class="cell-strong"><div class="row" style="gap:8px">
         <span class="avatar" style="width:26px;height:26px;font-size:11px">${initials(u.full_name||u.email)}</span>
         <span>${esc(u.full_name||'—')}${u.is_admin?' <span class="chip tiny">Admin</span>':''}</span></div></td>
       <td class="tiny">${esc(u.email||'—')}</td>
-      <td>${badge(u.status==='active'?'active':u.status==='pending'?'pending':'disabled',
-        u.status==='active'?T('activeUsers'):u.status==='pending'?T('pendingUsers'):T('disabledUsers'))}</td>
+      <td>${badge(u.effective_status==='active'?'active':u.effective_status==='pending'?'pending':u.effective_status==='expired'?'missed':'disabled',
+        u.effective_status==='active'?T('activeUsers'):u.effective_status==='pending'?T('pendingUsers'):u.effective_status==='expired'?T('expired'):T('disabledUsers'))}</td>
+      <td class="tiny">${u.access_expires_at?fmtDate(u.access_expires_at):(u.effective_status==='active'?T('noExpiry'):'—')}</td>
       <td class="tiny">${fmtDate(u.created_at)}</td>
       <td class="tiny">${u.last_login_at?fmtDateTime(u.last_login_at):'—'}</td>
       <td><div class="row" style="gap:5px">
         <button class="btn btn-sm" data-view="${u.id}">${T('viewWorkspace')}</button>
-        ${u.status!=='active'?`<button class="btn btn-sm btn-primary" data-act="active" data-u="${u.id}">${T('activate')}</button>`:''}
-        ${u.status==='active'&&u.id!==S.profile.id?`<button class="btn btn-sm" data-act="disabled" data-u="${u.id}">${T('disable')}</button>`:''}
+        ${u.effective_status!=='active'?`<button class="btn btn-sm btn-primary" data-activate="${u.id}">${T('activate')}</button>`:''}
+        ${u.effective_status==='active'&&u.id!==S.profile.id?`<button class="btn btn-sm" data-act="disabled" data-u="${u.id}">${T('disable')}</button>`:''}
         ${u.id!==S.profile.id?`<button class="btn btn-ghost btn-sm" data-udel="${u.id}">✕</button>`:''}
-      </div></td></tr>`).join('') || `<tr><td colspan="6" class="muted" style="text-align:center;padding:26px">${T('noData')}</td></tr>`;
+      </div></td></tr>`).join('') || `<tr><td colspan="7" class="muted" style="text-align:center;padding:26px">${T('noData')}</td></tr>`;
 
     $$('[data-view]').forEach(b=>b.onclick=()=>adminViewWorkspace(users.find(x=>x.id===b.dataset.view)));
+    $$('[data-activate]').forEach(b=>b.onclick=()=>adminActivateForm(b.dataset.activate));
     $$('[data-act]').forEach(b=>b.onclick=async()=>{
       try{ await DB.rpc('admin_set_status',{p_user:b.dataset.u,p_status:b.dataset.act});
         toast(T('savedOk'),'ok'); render(); }catch(e){ toast(e.message,'err'); }});
@@ -2227,6 +2234,34 @@ VIEWS.admin = async (v)=>{
   };
   $('#aFilter').onchange=draw; draw();
 };
+
+/* ---------- ADMIN: activate with an optional access duration ---------- */
+function adminActivateForm(userId){
+  const durations = [
+    {v:'', t:T('noExpiry')}, {v:'7', t:T('oneWeek')}, {v:'30', t:T('oneMonth')},
+    {v:'90', t:T('threeMonths')}, {v:'180', t:T('sixMonths')}, {v:'365', t:T('oneYear')},
+    {v:'custom', t:T('customDate')}
+  ];
+  Modal.open({slim:true, title:T('activateFor'),
+    body:`${selectField('faDur',T('accessDuration'),durations,'')}
+      <div class="field hide" id="faCustomWrap">${field('faCustom',T('expiresOn'),'date')}</div>`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="faSave">${T('activate')}</button>`});
+  $('#faDur').onchange=()=>$('#faCustomWrap').classList.toggle('hide', val('faDur')!=='custom');
+  $('#faSave').onclick=async()=>{
+    const d=val('faDur');
+    let expiresAt=null;
+    if(d==='custom'){
+      const c=val('faCustom'); if(!c) return toast(T('requiredField'),'err');
+      expiresAt=new Date(c+'T23:59:59').toISOString();
+    } else if(d){
+      expiresAt=new Date(Date.now()+Number(d)*86400000).toISOString();
+    }
+    try{
+      await DB.rpc('admin_set_status',{p_user:userId,p_status:'active',p_expires_at:expiresAt});
+      Modal.close(); toast(T('savedOk'),'ok'); render();
+    }catch(e){ toast(e.message,'err'); }
+  };
+}
 
 /* ---------- ADMIN: read-only view into a user's workspace ---------- */
 async function adminViewWorkspace(u){
