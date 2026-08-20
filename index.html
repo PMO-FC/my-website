@@ -563,7 +563,7 @@ ar:{
   /* admin */
   totalUsers:'إجمالي المستخدمين', pendingUsers:'قيد المراجعة', activeUsers:'مفعّلون',
   disabledUsers:'معطّلون', activate:'تفعيل', disable:'تعطيل', setPending:'إرجاع للمراجعة',
-  userDetails:'بيانات المستخدم', joined:'تاريخ التسجيل', lastLogin:'آخر دخول',
+  userDetails:'بيانات المستخدم', joined:'تاريخ التسجيل', lastLogin:'آخر دخول', viewWorkspace:'عرض مساحة العمل',
   /* ai */
   aiTitle:'مساعد المشاريع', aiSub:'يقرأ بياناتك فقط',
   aiPlaceholder:'اسأل عن مشاريعك…',
@@ -656,7 +656,7 @@ en:{
   save:'Save', saved:'Saved', dangerZone:'Danger zone',
   totalUsers:'Total users', pendingUsers:'Pending', activeUsers:'Active',
   disabledUsers:'Disabled', activate:'Activate', disable:'Disable', setPending:'Set pending',
-  userDetails:'User details', joined:'Joined', lastLogin:'Last login',
+  userDetails:'User details', joined:'Joined', lastLogin:'Last login', viewWorkspace:'View workspace',
   aiTitle:'Project assistant', aiSub:'Reads only your data',
   aiPlaceholder:'Ask about your projects…',
   aiWelcome:'I answer from your real project data. Try:',
@@ -2212,11 +2212,13 @@ VIEWS.admin = async (v)=>{
       <td class="tiny">${fmtDate(u.created_at)}</td>
       <td class="tiny">${u.last_login_at?fmtDateTime(u.last_login_at):'—'}</td>
       <td><div class="row" style="gap:5px">
+        <button class="btn btn-sm" data-view="${u.id}">${T('viewWorkspace')}</button>
         ${u.status!=='active'?`<button class="btn btn-sm btn-primary" data-act="active" data-u="${u.id}">${T('activate')}</button>`:''}
         ${u.status==='active'&&u.id!==S.profile.id?`<button class="btn btn-sm" data-act="disabled" data-u="${u.id}">${T('disable')}</button>`:''}
         ${u.id!==S.profile.id?`<button class="btn btn-ghost btn-sm" data-udel="${u.id}">✕</button>`:''}
       </div></td></tr>`).join('') || `<tr><td colspan="6" class="muted" style="text-align:center;padding:26px">${T('noData')}</td></tr>`;
 
+    $$('[data-view]').forEach(b=>b.onclick=()=>adminViewWorkspace(users.find(x=>x.id===b.dataset.view)));
     $$('[data-act]').forEach(b=>b.onclick=async()=>{
       try{ await DB.rpc('admin_set_status',{p_user:b.dataset.u,p_status:b.dataset.act});
         toast(T('savedOk'),'ok'); render(); }catch(e){ toast(e.message,'err'); }});
@@ -2225,6 +2227,40 @@ VIEWS.admin = async (v)=>{
   };
   $('#aFilter').onchange=draw; draw();
 };
+
+/* ---------- ADMIN: read-only view into a user's workspace ---------- */
+async function adminViewWorkspace(u){
+  if(!u) return;
+  Modal.open({wide:true, title:`${u.full_name||u.email} — ${T('viewWorkspace')}`,
+    body:`<div class="loading"><div class="spin"></div></div>`,
+    footer:`<button class="btn" data-close>${T('close')}</button>`});
+  try{
+    const [projects, health] = await Promise.all([
+      DB.select('projects',`select=*&owner_id=eq.${u.id}&order=created_at.desc`),
+      DB.select('v_project_health',`select=*&owner_id=eq.${u.id}`)
+    ]);
+    const hMap = Object.fromEntries(health.map(h=>[h.project_id,h]));
+    $('#modalBody').innerHTML = !projects.length
+      ? `<p class="muted" style="text-align:center;padding:20px 0">${T('noProjects')}</p>`
+      : projects.map(p=>{
+          const h=hMap[p.id]||{actual_progress:0,planned_progress:null,health:'on_track',open_tasks:0,overdue_tasks:0,total_tasks:0};
+          return `<div style="padding:12px 0;border-bottom:1px solid var(--line)">
+            <div class="row" style="margin-bottom:8px">
+              <span style="width:8px;height:8px;border-radius:2px;background:${esc(p.color||'#2563eb')};flex:none"></span>
+              <span style="font-weight:600;flex:1;min-width:0">${esc(p.name)}</span>
+              ${badge(p.status)} ${healthBadge(h.health)}
+            </div>
+            ${runway(h.actual_progress,h.planned_progress)}
+            <div class="row tiny muted" style="margin-top:8px;gap:12px">
+              <span>${h.total_tasks} ${T('tasks')}</span>
+              ${h.overdue_tasks?`<span style="color:var(--rose-600)">${h.overdue_tasks} ${T('overdue')}</span>`:''}
+              ${p.client?`<span>· ${esc(p.client)}</span>`:''}
+            </div></div>`;
+        }).join('');
+  }catch(e){
+    $('#modalBody').innerHTML = `<p class="muted" style="text-align:center;padding:20px 0">${esc(e.message)}</p>`;
+  }
+}
 
 /* ===================== AI ASSISTANT ===================== */
 const AI = {
