@@ -488,6 +488,8 @@ ar:{
   emailOrUsername:'البريد الإلكتروني أو اسم المستخدم', confirmPassword:'تأكيد كلمة المرور',
   passwordMismatch:'كلمتا المرور غير متطابقتين', usernameTaken:'اسم المستخدم مستخدم مسبقًا',
   phoneTaken:'رقم الجوال مستخدم مسبقًا', identifierNotFound:'لا يوجد حساب بهذا الاسم أو الرقم',
+  networkError:'تعذّر الاتصال بالخادم، تحقق من الإنترنت',
+  serviceUnavailable:'الخدمة غير متاحة مؤقتًا، حاول تسجيل الدخول بالبريد الإلكتروني',
   authNoteIn:'كلمة المرور 8 أحرف على الأقل.',
   authNoteUp:'بعد التسجيل ستكون حالة حسابك «قيد المراجعة» حتى يفعّله المشرف.',
   pendingTitle:'حسابك قيد المراجعة',
@@ -600,6 +602,8 @@ en:{
   emailOrUsername:'Email or username', confirmPassword:'Confirm password',
   passwordMismatch:'Passwords do not match', usernameTaken:'Username already taken',
   phoneTaken:'Phone number already in use', identifierNotFound:'No account found with that email, username or phone',
+  networkError:'Could not reach the server, check your connection',
+  serviceUnavailable:'Service temporarily unavailable, try signing in with email instead',
   authNoteIn:'Password must be at least 8 characters.',
   authNoteUp:'After sign-up your account stays pending until an admin activates it.',
   pendingTitle:'Your account is pending review',
@@ -810,10 +814,18 @@ const DB = {
      The lookup_login_identifier() function is SECURITY DEFINER and returns nothing
      but the matching email; it cannot be used to read any other profile data. */
   async rpcAnon(fn,args={}){
-    const r = await fetch(CFG.API_URL+`/rpc/${fn}`,{
-      method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(args)
-    });
-    if(!r.ok) return null;
+    let r;
+    try{
+      r = await fetch(CFG.API_URL+`/rpc/${fn}`,{
+        method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(args)
+      });
+    }catch(e){ throw new Error('network'); }
+    if(!r.ok){
+      // A non-2xx here means the service call itself failed (permissions, stale schema cache, etc.) —
+      // that's different from "no match found" and should surface as an error, not a false negative.
+      if(r.status===404) throw new Error('service_unavailable');
+      throw new Error('http_'+r.status);
+    }
     const txt=await r.text(); if(!txt) return null;
     try{ return JSON.parse(txt); }catch(_){ return null; }
   },
@@ -2754,7 +2766,12 @@ $('#authForm').onsubmit = async e=>{
       if(email.includes('@')){
         email = email.toLowerCase();
       } else {
-        const resolved = await DB.rpcAnon('lookup_login_identifier',{p_identifier:email});
+        let resolved;
+        try{
+          resolved = await DB.rpcAnon('lookup_login_identifier',{p_identifier:email});
+        }catch(e){
+          return fail(e.message==='network' ? T('networkError') : T('serviceUnavailable'));
+        }
         if(!resolved) return fail(T('identifierNotFound'));
         email = resolved;
       }
