@@ -524,6 +524,8 @@ ar:{
   /* tasks */
   newTask:'مهمة جديدة', editTask:'تعديل المهمة', taskName:'عنوان المهمة',
   dailyTasks:'مهام يومية', forProject:'لمشروع',
+  minsShort:'د', hoursShort:'س', daysShort:'ي', past:'قبل', inLabel:'خلال', allMeetings:'كل الاجتماعات',
+  upcomingOnly:'القادمة فقط', pastOnly:'السابقة فقط',
   assignee:'المسؤول', dueDate:'تاريخ الاستحقاق', progress:'نسبة الإنجاز',
   checklist:'قائمة التحقق', addChecklistItem:'أضف بندًا…', weight:'الوزن',
   phase:'المرحلة', noPhase:'بدون مرحلة', dependencies:'الاعتماديات',
@@ -628,6 +630,8 @@ en:{
   onTrack:'On track', atRisk:'At risk', delayed:'Delayed',
   newTask:'New task', editTask:'Edit task', taskName:'Task title',
   dailyTasks:'Daily tasks', forProject:'For a project',
+  minsShort:'m', hoursShort:'h', daysShort:'d', past:'', inLabel:'in', allMeetings:'All meetings',
+  upcomingOnly:'Upcoming only', pastOnly:'Past only',
   assignee:'Assignee', dueDate:'Due date', progress:'Progress',
   checklist:'Checklist', addChecklistItem:'Add an item…', weight:'Weight',
   phase:'Phase', noPhase:'No phase', dependencies:'Dependencies',
@@ -927,6 +931,7 @@ const NAV = [
   {sec:'navWork', items:[
     {k:'projects',  icon:'M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z'},
     {k:'tasks',     icon:'M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01'},
+    {k:'meetings',  icon:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2zM8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01'},
     {k:'calendar',  icon:'M3 9h18M7 3v3M17 3v3M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z'},
     {k:'reminders', icon:'M18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8M13.7 21a2 2 0 01-3.4 0'},
     {k:'reports',   icon:'M14 3v5h5M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8zM9 13h6M9 17h4'}
@@ -1022,6 +1027,28 @@ function runway(actual, planned, opts={}){
 }
 const healthBadge = h => badge(h==='on_track'?'on_track':h==='delayed'?'delayed':'at_risk',
   h==='on_track'?T('onTrack'):h==='delayed'?T('delayed'):T('atRisk'));
+
+/* Whichever is shorter: project name or code */
+function shortLabel(p){
+  if(!p) return '';
+  if(p.code && p.code.length < p.name.length) return p.code;
+  return p.name;
+}
+/* Human countdown to a datetime: "in 3d", "in 4h", "Past" */
+function countdown(dateStr, timeStr){
+  if(!dateStr) return null;
+  const iso = timeStr ? `${dateStr}T${timeStr}` : `${dateStr}T00:00:00`;
+  const target = new Date(iso).getTime();
+  const diff = target - Date.now();
+  const past = diff < 0;
+  const abs = Math.abs(diff);
+  const mins = Math.round(abs/60000), hrs=Math.round(abs/3600000), days=Math.round(abs/86400000);
+  let label;
+  if(mins<60) label = `${mins}${T('minsShort')}`;
+  else if(hrs<24) label = `${hrs}${T('hoursShort')}`;
+  else label = `${days}${T('daysShort')}`;
+  return { past, label: past ? (LANG==='ar'?`منذ ${label}`:`${label} ago`) : `${T('inLabel')} ${label}` };
+}
 </script>
 <script>
 /* ===================== DASHBOARD ===================== */
@@ -1607,12 +1634,29 @@ async function pTimeline(el,p){
     DB.select('phases',`select=*&project_id=eq.${p.id}&order=sort_order.asc`),
     DB.select('milestones',`select=*&project_id=eq.${p.id}&order=due_date.asc`)
   ]);
+
+  const toolbar = `<div class="row row-wrap tiny muted" style="gap:14px">
+      <span><i style="display:inline-block;width:11px;height:8px;background:var(--ink-600);border-radius:2px"></i> ${T('phase')}</span>
+      <span><i style="display:inline-block;width:11px;height:8px;background:var(--teal-600);border-radius:2px"></i> ${T('tasks')}</span>
+      <span><i style="display:inline-block;width:9px;height:9px;background:var(--violet-500);transform:rotate(45deg)"></i> ${T('milestones')}</span>
+      <span><i style="display:inline-block;width:2px;height:11px;background:var(--rose-600)"></i> ${T('today')}</span>
+      <div class="spacer"></div>
+      <button class="btn btn-sm" id="gAddPhase">+ ${T('phase')}</button>
+      <button class="btn btn-sm" id="gAddMs">+ ${T('newMilestone')}</button>
+      <button class="btn btn-primary btn-sm" id="gAddTask">+ ${T('newTask')}</button>
+    </div>`;
+
   const dates=[p.start_date,p.end_date,
     ...tasks.flatMap(t=>[t.start_date,t.due_date]),
     ...phases.flatMap(f=>[f.start_date,f.end_date]),
     ...ms.map(m=>m.due_date)].filter(Boolean).sort();
 
-  if(!dates.length){ el.innerHTML=emptyState(T('noData'),T('noTasksBody')); return; }
+  if(!dates.length){
+    el.innerHTML=`<div class="stack">${toolbar}
+      <div class="card">${emptyState(T('noData'),T('noTasksBody'))}</div></div>`;
+    bindTimelineToolbar(el,p,phases);
+    return;
+  }
   let min=dates[0], max=dates[dates.length-1];
   if(daysBetween(min,max)<14) max=addDays(min,14);
   min=addDays(min,-3); max=addDays(max,3);
@@ -1634,28 +1678,29 @@ async function pTimeline(el,p){
       ${prog!=null?`<i class="g-bar-fill" style="width:${prog}%"></i>`:''}<span>${esc(label)}</span></div>`;
   };
   const rows=[];
-  phases.forEach(f=>rows.push({label:f.name, bold:true, html:bar(f.start_date,f.end_date,'var(--ink-600)',f.name,null,'g-phase')}));
-  tasks.forEach(t=>rows.push({label:t.title, html:bar(t.start_date,t.due_date,
+  phases.forEach(f=>rows.push({
+    label:f.name, bold:true, phaseId:f.id, isPhase:true,
+    html:bar(f.start_date,f.end_date,'var(--ink-600)',f.name,null,'g-phase')
+  }));
+  tasks.forEach(t=>rows.push({
+    label:t.title, taskId:t.id,
+    html:bar(t.start_date,t.due_date,
       t.status==='completed'?'var(--green-600)':t.status==='blocked'?'var(--rose-600)':'var(--teal-600)',
-      t.title,t.progress)}));
+      t.title,t.progress)
+  }));
   ms.forEach(m=>{ if(m.due_date) rows.push({label:'◆ '+m.title, html:`<div class="g-ms" style="inset-inline-start:calc(${pos(m.due_date)}% - 9px)" title="${esc(m.title)}"></div>`}); });
 
   const todayPos = todayISO()>=min && todayISO()<=max ? pos(todayISO()) : null;
 
-  el.innerHTML=`<div class="stack">
-    <div class="row row-wrap tiny muted" style="gap:14px">
-      <span><i style="display:inline-block;width:11px;height:8px;background:var(--ink-600);border-radius:2px"></i> ${T('phase')}</span>
-      <span><i style="display:inline-block;width:11px;height:8px;background:var(--teal-600);border-radius:2px"></i> ${T('tasks')}</span>
-      <span><i style="display:inline-block;width:9px;height:9px;background:var(--violet-500);transform:rotate(45deg)"></i> ${T('milestones')}</span>
-      <span><i style="display:inline-block;width:2px;height:11px;background:var(--rose-600)"></i> ${T('today')}</span>
-      <div class="spacer"></div>
-      <button class="btn btn-sm" id="gAddMs">+ ${T('newMilestone')}</button>
-    </div>
+  el.innerHTML=`<div class="stack">${toolbar}
     <div class="gantt"><div class="gantt-inner">
       <div class="g-head"><div class="g-label-col">${T('taskName')}</div>
         <div class="g-scale">${months.map(m=>`<div class="g-tick">${monLabel(m)}</div>`).join('')}</div></div>
       ${rows.map(r=>`<div class="g-row">
-        <div class="g-label" style="${r.bold?'font-weight:600':''}"><span>${esc(r.label)}</span></div>
+        <div class="g-label" style="${r.bold?'font-weight:600':''};justify-content:space-between">
+          <span data-open="${r.taskId||''}" style="${r.taskId?'cursor:pointer':''};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.label)}</span>
+          ${r.isPhase?`<button class="btn btn-ghost btn-sm" data-quicktask="${r.phaseId}" title="${T('newTask')}" style="flex:none;padding:2px 6px">+</button>`:''}
+        </div>
         <div class="g-lane">
           <div class="g-grid">${months.map(()=>'<i></i>').join('')}</div>
           ${todayPos!=null?`<div class="g-today" style="inset-inline-start:${todayPos}%"></div>`:''}
@@ -1663,7 +1708,40 @@ async function pTimeline(el,p){
         </div></div>`).join('')}
     </div></div>
   </div>`;
+  bindTimelineToolbar(el,p,phases);
+  $$('[data-quicktask]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); quickAddTask(p,phases,b.dataset.quicktask); });
+  $$('[data-open]').forEach(s=>{ if(s.dataset.open) s.onclick=()=>taskDetail(s.dataset.open,p,phases); });
+}
+function bindTimelineToolbar(el,p,phases){
   $('#gAddMs').onclick=()=>milestoneForm(null,p);
+  $('#gAddPhase').onclick=()=>phaseForm(null,p);
+  $('#gAddTask').onclick=()=>quickAddTask(p,phases,null);
+}
+
+/* Fast task creation from the Timeline — preselects the phase, then immediately
+   opens the checklist view so the user can add checklist items right away. */
+async function quickAddTask(p, phases, presetPhaseId){
+  Modal.open({wide:true, title:T('newTask'),
+    body:`${field('fqTitle',T('taskName'),'text','','required')}
+      <div class="grid-3">
+        ${selectField('fqPhase',T('phase'),[{v:'',t:T('noPhase')},...phases.map(f=>({v:f.id,t:f.name}))],presetPhaseId||'')}
+        ${field('fqStart',T('startDate'),'date')}
+        ${field('fqDue',T('dueDate'),'date')}
+        ${selectField('fqPriority',T('priority'),OPT.priority(),'medium')}
+      </div>`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="fqSave">${T('create')}</button>`});
+  $('#fqSave').onclick=async()=>{
+    const title=val('fqTitle'); if(!title) return toast(T('requiredField'),'err');
+    try{
+      const nt=await DB.insert('tasks',{owner_id:S.profile.id, project_id:p.id, title,
+        phase_id:valOrNull('fqPhase'), start_date:valOrNull('fqStart'), due_date:valOrNull('fqDue'),
+        priority:val('fqPriority'), status:'todo'});
+      await logActivity('task','created',`${T('newTask')}: ${title}`,p.id,nt.id);
+      Modal.close();
+      // Guided flow: jump straight into the checklist so the user can keep going without extra clicks.
+      setTimeout(()=>taskDetail(nt.id,p,phases),150);
+    }catch(e){ toast(e.message,'err'); }
+  };
 }
 
 /* ---------- MILESTONES ---------- */
@@ -1703,6 +1781,73 @@ async function milestoneForm(m,p){
 }
 
 /* ---------- MEETINGS ---------- */
+/* ===================== GLOBAL MEETINGS PAGE ===================== */
+VIEWS.meetings = async (v)=>{
+  topAction(`+ ${T('newMeeting')}`, ()=>meetingForm(null,{}));
+  const [meets, projects] = await Promise.all([
+    DB.select('meetings','select=*&order=meeting_date.asc,start_time.asc&limit=500'),
+    DB.select('projects','select=id,name,code,color')
+  ]);
+  const pMap=Object.fromEntries(projects.map(p=>[p.id,p]));
+  if(!meets.length){ v.innerHTML=emptyState(T('noMeetings'),'',T('newMeeting'),()=>meetingForm(null,{})); return; }
+
+  const scope = S.cache.meetScope || 'upcoming';
+  v.innerHTML=`<div class="stack">
+    <div class="row row-wrap">
+      <div class="pill-tabs">
+        <button class="${scope==='upcoming'?'on':''}" data-scope="upcoming">${T('upcomingOnly')}</button>
+        <button class="${scope==='all'?'on':''}" data-scope="all">${T('allMeetings')}</button>
+        <button class="${scope==='past'?'on':''}" data-scope="past">${T('pastOnly')}</button>
+      </div>
+      <input class="inp" id="mgSearch" placeholder="${T('search')}…" style="max-width:220px">
+      <select class="inp" id="mgSource" style="max-width:190px">
+        <option value="">${T('all')}</option>
+        <option value="daily">${T('dailyTasks')}</option>
+        ${projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}
+      </select>
+    </div>
+    <div id="mgList" class="stack"></div>
+  </div>`;
+
+  $$('[data-scope]').forEach(b=>b.onclick=()=>{ S.cache.meetScope=b.dataset.scope; render(); });
+
+  const draw=()=>{
+    const q=$('#mgSearch').value.toLowerCase(), src=$('#mgSource').value;
+    const now=Date.now();
+    let rows = meets.filter(m=>
+      (!q||m.title.toLowerCase().includes(q)) &&
+      (!src || (src==='daily' ? !m.project_id : m.project_id===src)));
+    rows = rows.filter(m=>{
+      const cd=countdown(m.meeting_date,m.start_time);
+      if(scope==='upcoming') return !cd || !cd.past;
+      if(scope==='past') return cd && cd.past;
+      return true;
+    });
+
+    $('#mgList').innerHTML = rows.length ? rows.map(m=>{
+      const proj=pMap[m.project_id];
+      const cd=countdown(m.meeting_date,m.start_time);
+      return `<div class="card card-pad" style="cursor:pointer" data-meet="${m.id}">
+        <div class="row row-wrap" style="gap:10px">
+          <div style="flex:1;min-width:200px">
+            <div style="font-weight:600">${esc(m.title)}</div>
+            <div class="li-sub" style="margin-top:4px">
+              <span>${fmtDate(m.meeting_date)}${m.start_time?` · ${m.start_time.slice(0,5)}`:''}</span>
+              ${m.location?`<span>· ${esc(m.location)}</span>`:''}
+              <span class="chip">${proj?esc(shortLabel(proj)):T('dailyTasks')}</span>
+            </div>
+          </div>
+          ${badge(m.status)}
+          ${cd?`<span class="badge ${cd.past?'b-gray':'b-teal'}">${cd.label}</span>`:''}
+        </div></div>`;
+    }).join('') : `<p class="muted" style="text-align:center;padding:30px">${T('noData')}</p>`;
+
+    $$('[data-meet]').forEach(c=>c.onclick=()=>meetingDetail(c.dataset.meet));
+  };
+  ['mgSearch','mgSource'].forEach(id=>{const e=$('#'+id); e.oninput=draw; e.onchange=draw;});
+  draw();
+};
+
 async function pMeetings(el,p){
   const meets = await DB.select('meetings',`select=*&project_id=eq.${p.id}&order=meeting_date.desc`);
   el.innerHTML=`<div class="stack">
@@ -1715,14 +1860,22 @@ async function pMeetings(el,p){
         <td class="tiny">${T(m.meeting_type||'other')}</td><td class="tiny">${esc(m.location||'—')}</td>
         <td>${badge(m.status)}</td><td><button class="btn btn-ghost btn-sm" data-mtdel="${m.id}">✕</button></td></tr>`).join('')}
       </tbody></table></div></div>`
-    :emptyState(T('noMeetings'),'',T('newMeeting'),()=>meetingForm(null,p))}
+    :emptyState(T('noMeetings'),'',T('newMeeting'),()=>meetingForm(null,{lockedProjectId:p.id,lockedProjectName:p.name}))}
   </div>`;
-  $('#mtNew').onclick=()=>meetingForm(null,p);
-  $$('[data-mt]').forEach(r=>r.onclick=e=>{ if(e.target.closest('[data-mtdel]'))return; meetingDetail(r.dataset.mt,p); });
+  $('#mtNew').onclick=()=>meetingForm(null,{lockedProjectId:p.id,lockedProjectName:p.name});
+  $$('[data-mt]').forEach(r=>r.onclick=e=>{ if(e.target.closest('[data-mtdel]'))return; meetingDetail(r.dataset.mt); });
   $$('[data-mtdel]').forEach(b=>b.onclick=e=>{e.stopPropagation();
     Modal.confirm(T('confirmDelete'),T('confirmDeleteBody'),async()=>{await DB.remove('meetings',b.dataset.mtdel);toast(T('deletedOk'),'ok');render();});});
 }
-async function meetingForm(m,p){
+
+/* meetingForm: opts = {lockedProjectId, lockedProjectName} when created from inside a project workspace
+   (dropdown hidden, pre-bound). Otherwise shows an optional project picker ("no project" = standalone). */
+async function meetingForm(m, opts={}){
+  let projects=[];
+  if(!opts.lockedProjectId) projects = await DB.select('projects','select=id,name,code&is_archived=eq.false&order=name.asc');
+  const projSelect = opts.lockedProjectId
+    ? `<div class="field"><label>${T('project')}</label><input class="inp" value="${esc(opts.lockedProjectName)}" disabled></div>`
+    : selectField('fgProj',T('project'),[{v:'',t:T('dailyTasks')},...projects.map(p=>({v:p.id,t:p.name}))], m?.project_id||'');
   Modal.open({wide:true,title:m?T('edit'):T('newMeeting'),
     body:`${field('fgTitle',T('meetingTitle'),'text',m?.title,'required')}
       <div class="grid-3">
@@ -1733,26 +1886,33 @@ async function meetingForm(m,p){
         ${selectField('fgType',T('meetingType'),OPT.meetingType(),m?.meeting_type||'internal')}
         ${selectField('fgStatus',T('status'),OPT.meetingStatus(),m?.status||'scheduled')}
       </div>
+      ${projSelect}
       ${field('fgPart',T('participants'),'text',m?.participants)}
       ${field('fgDesc',T('description'),'textarea',m?.description)}
       ${field('fgNotes',T('notes'),'textarea',m?.notes)}`,
     footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="mtSave">${m?T('update'):T('create')}</button>`});
   $('#mtSave').onclick=async()=>{
     const title=val('fgTitle'); if(!title) return toast(T('requiredField'),'err');
-    const row={owner_id:S.profile.id,project_id:p.id,title,meeting_date:val('fgDate')||todayISO(),
+    const project_id = opts.lockedProjectId || valOrNull('fgProj');
+    const row={owner_id:S.profile.id,project_id,title,meeting_date:val('fgDate')||todayISO(),
       start_time:valOrNull('fgFrom'),end_time:valOrNull('fgTo'),location:valOrNull('fgLoc'),
       meeting_type:val('fgType'),status:val('fgStatus'),participants:valOrNull('fgPart'),
       description:valOrNull('fgDesc'),notes:valOrNull('fgNotes')};
-    try{ m?await DB.update('meetings',m.id,row):await DB.insert('meetings',row);
-      Modal.close(); toast(T('savedOk'),'ok'); render(); }catch(e){ toast(e.message,'err'); }
+    try{
+      if(m) await DB.update('meetings',m.id,row); else await DB.insert('meetings',row);
+      Modal.close(); toast(T('savedOk'),'ok'); render();
+    }catch(e){ toast(e.message,'err'); }
   };
 }
-async function meetingDetail(id,p){
+
+async function meetingDetail(id){
   const [[m], items] = await Promise.all([
     DB.select('meetings',`select=*&id=eq.${id}`),
     DB.select('meeting_action_items',`select=*&meeting_id=eq.${id}&order=created_at.asc`)
   ]);
   if(!m) return;
+  let proj=null;
+  if(m.project_id){ const r=await DB.select('projects',`select=id,name,code,color&id=eq.${m.project_id}`); proj=r[0]||null; }
   const drawAI = list => list.map(a=>`
     <div class="chk ${a.is_done?'done':''}" data-ai="${a.id}">
       <input type="checkbox" ${a.is_done?'checked':''}>
@@ -1767,7 +1927,8 @@ async function meetingDetail(id,p){
         ${badge(m.status)}<span class="chip">${fmtDate(m.meeting_date)}</span>
         ${m.start_time?`<span class="chip num">${m.start_time.slice(0,5)}${m.end_time?'–'+m.end_time.slice(0,5):''}</span>`:''}
         ${m.location?`<span class="chip">${esc(m.location)}</span>`:''}
-        <span class="chip">${T(m.meeting_type||'other')}</span></div>
+        <span class="chip">${T(m.meeting_type||'other')}</span>
+        <span class="chip">${proj?esc(shortLabel(proj)):T('dailyTasks')}</span></div>
       ${m.participants?`<div style="margin-bottom:12px"><div class="eyebrow">${T('participants')}</div>${esc(m.participants)}</div>`:''}
       ${m.description?`<p style="white-space:pre-wrap">${esc(m.description)}</p>`:''}
       ${m.notes?`<div style="margin:12px 0"><div class="eyebrow">${T('notes')}</div><p style="white-space:pre-wrap;margin:4px 0 0">${esc(m.notes)}</p></div>`:''}
@@ -1778,7 +1939,9 @@ async function meetingDetail(id,p){
         <input class="inp" id="aiNew" placeholder="${T('addActionItem')}">
         <input class="inp" id="aiDue" type="date" style="max-width:150px">
         <button class="btn btn-primary" id="aiAdd">${T('add')}</button></div>`,
-    footer:`<button class="btn" data-close>${T('close')}</button><button class="btn btn-primary" id="mtEdit">${T('edit')}</button>`});
+    footer:`<button class="btn" data-close>${T('close')}</button>
+            <button class="btn btn-danger" id="mtDel">${T('del')}</button>
+            <button class="btn btn-primary" id="mtEdit">${T('edit')}</button>`});
 
   const reload=async()=>{
     const nl=await DB.select('meeting_action_items',`select=*&meeting_id=eq.${id}&order=created_at.asc`);
@@ -1792,11 +1955,11 @@ async function meetingDetail(id,p){
     $$('#aiList [data-conv]').forEach(b=>b.onclick=async()=>{
       const item=(await DB.select('meeting_action_items',`select=*&id=eq.${b.dataset.conv}`))[0];
       try{
-        const nt=await DB.insert('tasks',{owner_id:S.profile.id,project_id:p.id,title:item.text,
+        const nt=await DB.insert('tasks',{owner_id:S.profile.id,project_id:m.project_id||null,title:item.text,
           assignee:item.assignee,due_date:item.due_date,status:'todo',
           description:`${T('meeting')}: ${m.title}`});
         await DB.update('meeting_action_items',item.id,{converted_task_id:nt.id});
-        await logActivity('task','created',`${T('convertToTask')}: ${item.text}`,p.id,nt.id);
+        await logActivity('task','created',`${T('convertToTask')}: ${item.text}`,m.project_id||null,nt.id);
         toast(T('savedOk'),'ok'); await reload();
       }catch(e){ toast(e.message,'err'); }
     });
@@ -1807,7 +1970,10 @@ async function meetingDetail(id,p){
       $('#aiNew').value=''; $('#aiDue').value=''; await reload(); }catch(e){toast(e.message,'err');}
   };
   $('#aiNew').onkeydown=e=>{ if(e.key==='Enter'){e.preventDefault();$('#aiAdd').click();} };
-  $('#mtEdit').onclick=()=>{ Modal.close(); setTimeout(()=>meetingForm(m,p),120); };
+  $('#mtEdit').onclick=()=>{ Modal.close(); setTimeout(()=>meetingForm(m, proj?{lockedProjectId:proj.id,lockedProjectName:proj.name}:{}),120); };
+  $('#mtDel').onclick=()=>Modal.confirm(T('confirmDelete'),T('confirmDeleteBody'),async()=>{
+    await DB.remove('meetings',id); Modal.close(); toast(T('deletedOk'),'ok'); render();
+  });
   bind();
 }
 
