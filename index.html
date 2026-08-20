@@ -2730,7 +2730,7 @@ $('#authForm').onsubmit = async e=>{
 
   try{
     if(authMode==='signup'){
-      const email=val('iEmail'), confirm=$('#iPassConfirm').value;
+      const email=val('iEmail').toLowerCase(), confirm=$('#iPassConfirm').value;
       if(!email) return fail(T('requiredField'));
       if(pass!==confirm) return fail(T('passwordMismatch'));
       const first=val('iFirst'), last=val('iLast');
@@ -2751,7 +2751,9 @@ $('#authForm').onsubmit = async e=>{
       }
     } else {
       let email = val('iIdentifier');
-      if(!email.includes('@')){
+      if(email.includes('@')){
+        email = email.toLowerCase();
+      } else {
         const resolved = await DB.rpcAnon('lookup_login_identifier',{p_identifier:email});
         if(!resolved) return fail(T('identifierNotFound'));
         email = resolved;
