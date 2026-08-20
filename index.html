@@ -523,6 +523,7 @@ ar:{
   onTrack:'على المسار', atRisk:'معرّض للخطر', delayed:'متأخر',
   /* tasks */
   newTask:'مهمة جديدة', editTask:'تعديل المهمة', taskName:'عنوان المهمة',
+  dailyTasks:'مهام يومية', forProject:'لمشروع',
   assignee:'المسؤول', dueDate:'تاريخ الاستحقاق', progress:'نسبة الإنجاز',
   checklist:'قائمة التحقق', addChecklistItem:'أضف بندًا…', weight:'الوزن',
   phase:'المرحلة', noPhase:'بدون مرحلة', dependencies:'الاعتماديات',
@@ -626,6 +627,7 @@ en:{
   variance:'Variance', health:'Health', backToProjects:'All projects',
   onTrack:'On track', atRisk:'At risk', delayed:'Delayed',
   newTask:'New task', editTask:'Edit task', taskName:'Task title',
+  dailyTasks:'Daily tasks', forProject:'For a project',
   assignee:'Assignee', dueDate:'Due date', progress:'Progress',
   checklist:'Checklist', addChecklistItem:'Add an item…', weight:'Weight',
   phase:'Phase', noPhase:'No phase', dependencies:'Dependencies',
@@ -1142,9 +1144,9 @@ VIEWS.myDay = async (v)=>{
           <div class="chk-text">
             <div style="font-weight:500">${esc(t.title)}</div>
             <div class="li-sub">
-              <span class="chip" style="cursor:pointer" data-proj="${t.project_id}">
+              ${t.project_id?`<span class="chip" style="cursor:pointer" data-proj="${t.project_id}">
                 <span style="width:6px;height:6px;border-radius:2px;background:${esc(t.project_color||'#2563eb')};display:inline-block"></span>
-                ${esc(t.project_name)}</span>
+                ${esc(t.project_name)}</span>`:`<span class="chip">${T('dailyTasks')}</span>`}
               <span>${fmtDate(t.due_date)}</span>
               ${t.assignee?`<span>· ${esc(t.assignee)}</span>`:''}
               ${t.progress?`<span class="num">· ${t.progress}%</span>`:''}
@@ -1858,43 +1860,218 @@ async function riskForm(r,p){
 <script>
 /* ===================== GLOBAL TASKS ===================== */
 VIEWS.tasks = async (v)=>{
+  topAction(`+ ${T('newTask')}`, ()=>taskTypeChooser());
   const [tasks, projects] = await Promise.all([
     DB.select('tasks','select=*&order=due_date.asc.nullslast,priority.desc&limit=500'),
     DB.select('projects','select=id,name,color')
   ]);
   const pMap=Object.fromEntries(projects.map(p=>[p.id,p]));
-  if(!tasks.length){ v.innerHTML=emptyState(T('noTasks'),T('noTasksBody'),T('newProject'),()=>go('projects')); return; }
+  if(!tasks.length){
+    v.innerHTML=emptyState(T('noTasks'),T('noTasksBody'),T('newTask'),()=>taskTypeChooser());
+    return;
+  }
+  const view = S.cache.gtView || 'table';
 
   v.innerHTML=`<div class="stack">
     <div class="row row-wrap">
-      <input class="inp" id="gtSearch" placeholder="${T('search')}…" style="max-width:250px">
-      <select class="inp" id="gtStatus" style="max-width:160px"><option value="">${T('allStatuses')}</option>
+      <div class="pill-tabs">
+        <button class="${view==='table'?'on':''}" data-gtv="table">${T('table')}</button>
+        <button class="${view==='kanban'?'on':''}" data-gtv="kanban">${T('kanban')}</button>
+      </div>
+      <input class="inp" id="gtSearch" placeholder="${T('search')}…" style="max-width:220px">
+      <select class="inp" id="gtStatus" style="max-width:150px"><option value="">${T('allStatuses')}</option>
         ${OPT.taskStatus().map(o=>`<option value="${o.v}">${o.t}</option>`).join('')}</select>
-      <select class="inp" id="gtProject" style="max-width:200px"><option value="">${T('allProjects')}</option>
-        ${projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select>
+      <select class="inp" id="gtSource" style="max-width:170px">
+        <option value="">${T('all')}</option>
+        <option value="daily">${T('dailyTasks')}</option>
+        ${projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}
+      </select>
     </div>
-    <div class="card"><div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>${T('taskName')}</th><th>${T('project')}</th><th>${T('assignee')}</th>
-        <th>${T('dueDate')}</th><th>${T('status')}</th><th>${T('progress')}</th></tr></thead>
-      <tbody id="gtBody"></tbody></table></div></div></div>`;
+    <div id="gtBody"></div>
+  </div>`;
+
+  $$('[data-gtv]').forEach(b=>b.onclick=()=>{ S.cache.gtView=b.dataset.gtv; render(); });
 
   const draw=()=>{
-    const q=$('#gtSearch').value.toLowerCase(), st=$('#gtStatus').value, pj=$('#gtProject').value;
-    const rows=tasks.filter(t=>(!q||t.title.toLowerCase().includes(q))&&(!st||t.status===st)&&(!pj||t.project_id===pj));
-    $('#gtBody').innerHTML = rows.length?rows.map(t=>{
-      const pr=pMap[t.project_id]||{}; const late=t.status!=='completed'&&t.due_date&&t.due_date<todayISO();
-      return `<tr data-goto="${t.project_id}" style="cursor:pointer">
-        <td class="cell-strong"><span class="pri-dot" style="background:${PRI_COLOR[t.priority]};display:inline-block;margin-inline-end:7px"></span>${esc(t.title)}</td>
-        <td class="tiny"><span class="chip"><span style="width:6px;height:6px;border-radius:2px;background:${esc(pr.color||'#888')};display:inline-block"></span>${esc(pr.name||'—')}</span></td>
-        <td class="tiny">${esc(t.assignee||'—')}</td>
-        <td class="tiny" style="${late?'color:var(--rose-600);font-weight:500':''}">${fmtDate(t.due_date)}</td>
-        <td>${badge(t.status)}</td><td class="num tiny">${t.progress}%</td></tr>`;
-    }).join('') : `<tr><td colspan="6" class="muted" style="text-align:center;padding:26px">${T('noData')}</td></tr>`;
-    $$('[data-goto]').forEach(r=>r.onclick=()=>go('projects',r.dataset.goto,'tasks'));
+    const q=$('#gtSearch').value.toLowerCase(), st=$('#gtStatus').value, src=$('#gtSource').value;
+    const rows=tasks.filter(t=>
+      (!q||t.title.toLowerCase().includes(q)) &&
+      (!st||t.status===st) &&
+      (!src || (src==='daily' ? !t.project_id : t.project_id===src)));
+    const body=$('#gtBody');
+
+    if(view==='kanban'){
+      const cols=['todo','in_progress','blocked','completed'];
+      const cls={todo:'b-gray',in_progress:'b-teal',blocked:'b-rose',completed:'b-green'};
+      body.innerHTML=`<div class="kanban">${cols.map(c=>{
+        const list=rows.filter(t=>t.status===c);
+        return `<div class="kcol"><div class="kcol-head"><span class="badge ${cls[c]}">${T(c)}</span>
+          <div class="spacer"></div><span class="kcount num">${list.length}</span></div>
+          ${list.map(t=>{
+            const pr=pMap[t.project_id];
+            return `<div class="kcard" data-task="${t.id}" data-proj="${t.project_id||''}">
+              <div class="kcard-title">${esc(t.title)}</div>
+              <div class="row tiny muted" style="gap:6px;flex-wrap:wrap">
+                <span class="chip" style="gap:4px">${pr?`<span style="width:6px;height:6px;border-radius:2px;background:${esc(pr.color||'#888')};display:inline-block"></span>${esc(pr.name)}`:T('dailyTasks')}</span>
+              </div>
+              <div class="row tiny muted" style="gap:7px;margin-top:6px">
+                <span class="pri-dot" style="background:${PRI_COLOR[t.priority]}"></span>
+                ${t.due_date?`<span>${fmtDate(t.due_date)}</span>`:''}
+                <div class="spacer"></div><span class="num">${t.progress}%</span>
+              </div>
+              <div class="bar" style="margin-top:7px"><i style="width:${t.progress}%"></i></div>
+            </div>`;
+          }).join('')}</div>`;
+      }).join('')}</div>`;
+    } else {
+      body.innerHTML=`<div class="card"><div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>${T('taskName')}</th><th>${T('project')}</th><th>${T('assignee')}</th>
+          <th>${T('dueDate')}</th><th>${T('status')}</th><th>${T('progress')}</th></tr></thead>
+        <tbody>${rows.length?rows.map(t=>{
+          const pr=pMap[t.project_id]; const late=t.status!=='completed'&&t.due_date&&t.due_date<todayISO();
+          return `<tr data-task="${t.id}" data-proj="${t.project_id||''}" style="cursor:pointer">
+            <td class="cell-strong"><span class="pri-dot" style="background:${PRI_COLOR[t.priority]};display:inline-block;margin-inline-end:7px"></span>${esc(t.title)}</td>
+            <td class="tiny">${pr?`<span class="chip"><span style="width:6px;height:6px;border-radius:2px;background:${esc(pr.color||'#888')};display:inline-block"></span>${esc(pr.name)}</span>`:`<span class="chip">${T('dailyTasks')}</span>`}</td>
+            <td class="tiny">${esc(t.assignee||'—')}</td>
+            <td class="tiny" style="${late?'color:var(--rose-600);font-weight:500':''}">${fmtDate(t.due_date)}</td>
+            <td>${badge(t.status)}</td><td class="num tiny">${t.progress}%</td></tr>`;
+        }).join('') : `<tr><td colspan="6" class="muted" style="text-align:center;padding:26px">${T('noData')}</td></tr>`}
+        </tbody></table></div></div>`;
+    }
+
+    body.querySelectorAll('[data-task]').forEach(el=>el.onclick=()=>{
+      const t=tasks.find(x=>x.id===el.dataset.task);
+      if(t.project_id) go('projects', t.project_id, 'tasks');
+      else dailyTaskDetail(t);
+    });
   };
-  ['gtSearch','gtStatus','gtProject'].forEach(id=>{const e=$('#'+id); e.oninput=draw; e.onchange=draw;});
+  ['gtSearch','gtStatus','gtSource'].forEach(id=>{const e=$('#'+id); e.oninput=draw; e.onchange=draw;});
   draw();
 };
+
+/* ---------- ADD TASK: choose project vs daily ---------- */
+async function taskTypeChooser(){
+  const projects = await DB.select('projects','select=id,name,color&is_archived=eq.false&order=name.asc');
+  Modal.open({slim:true, title:T('newTask'),
+    body:`<div class="stack">
+      <button class="btn btn-block" style="justify-content:flex-start;padding:14px" id="chooseProject">
+        <span style="font-weight:600">${T('forProject')}</span></button>
+      <button class="btn btn-block" style="justify-content:flex-start;padding:14px" id="chooseDaily">
+        <span style="font-weight:600">${T('dailyTasks')}</span></button>
+      <div id="projPicker" class="hide">${selectField('tcProject',T('project'),projects.map(p=>({v:p.id,t:p.name})))}</div>
+    </div>`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary hide" id="tcGo">${T('create')}</button>`});
+  let mode=null;
+  $('#chooseProject').onclick=()=>{
+    mode='project';
+    if(!projects.length){ toast(T('noProjects'),'err'); return; }
+    $('#projPicker').classList.remove('hide'); $('#tcGo').classList.remove('hide');
+    $('#chooseProject').classList.add('btn-primary'); $('#chooseDaily').classList.remove('btn-primary');
+  };
+  $('#chooseDaily').onclick=()=>{
+    mode='daily';
+    $('#projPicker').classList.add('hide');
+    Modal.close(); setTimeout(()=>dailyTaskForm(null),120);
+  };
+  $('#tcGo').onclick=async()=>{
+    if(mode!=='project') return;
+    const pid=val('tcProject'); if(!pid) return toast(T('requiredField'),'err');
+    const p=projects.find(x=>x.id===pid);
+    const phases=await DB.select('phases',`select=*&project_id=eq.${pid}&order=sort_order.asc`);
+    Modal.close(); setTimeout(()=>taskForm(null,p,phases),120);
+  };
+}
+
+/* ---------- DAILY TASK FORM (no project) ---------- */
+async function dailyTaskForm(t){
+  const isNew=!t;
+  Modal.open({wide:true, title: isNew?T('newTask'):T('editTask'),
+    body:`${field('fdTitle',T('taskName'),'text',t?.title,'required')}
+      <div class="grid-3">
+        ${selectField('fdPriority',T('priority'),OPT.priority(),t?.priority||'medium')}
+        ${field('fdStart',T('startDate'),'date',t?.start_date)}
+        ${field('fdDue',T('dueDate'),'date',t?.due_date)}
+        ${selectField('fdStatus',T('status'),OPT.taskStatus(),t?.status||'todo')}
+        ${field('fdProgress',T('progress')+' %','number',t?.progress??0,'min="0" max="100"')}
+      </div>
+      ${field('fdDesc',T('description'),'textarea',t?.description)}
+      ${field('fdNotes',T('notes'),'textarea',t?.notes)}`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button>
+            <button class="btn btn-primary" id="tdSave">${isNew?T('create'):T('update')}</button>`});
+  $('#tdSave').onclick=async()=>{
+    const title=val('fdTitle'); if(!title) return toast(T('requiredField'),'err');
+    const row={owner_id:S.profile.id, project_id:null, title,
+      priority:val('fdPriority'), start_date:valOrNull('fdStart'), due_date:valOrNull('fdDue'),
+      status:val('fdStatus'), progress:Number(val('fdProgress')||0),
+      description:valOrNull('fdDesc'), notes:valOrNull('fdNotes')};
+    try{
+      $('#tdSave').disabled=true;
+      if(isNew){ const nt=await DB.insert('tasks',row); await logActivity('task','created',`${T('newTask')}: ${title}`,null,nt.id); }
+      else { await DB.update('tasks',t.id,row); await logActivity('task','updated',`${T('editTask')}: ${title}`,null,t.id); }
+      Modal.close(); toast(T('savedOk'),'ok'); render();
+    }catch(e){ toast(e.message,'err'); $('#tdSave').disabled=false; }
+  };
+}
+
+/* ---------- DAILY TASK DETAIL (checklist, same as project tasks) ---------- */
+async function dailyTaskDetail(t){
+  const items = await DB.select('task_checklist',`select=*&task_id=eq.${t.id}&order=sort_order.asc,created_at.asc`);
+  const drawChecklist = list => list.map(c=>`
+    <div class="chk ${c.is_done?'done':''}" data-chk="${c.id}">
+      <input type="checkbox" ${c.is_done?'checked':''}>
+      <div class="chk-text">${esc(c.text)}</div>
+      <button class="btn btn-ghost btn-sm" data-chkdel="${c.id}">✕</button>
+    </div>`).join('');
+
+  Modal.open({wide:true, title:t.title,
+    body:`<div class="row row-wrap" style="margin-bottom:15px;gap:8px">
+        ${badge(t.status)} <span class="chip">${T('dailyTasks')}</span>
+        <span class="chip"><span class="pri-dot" style="background:${PRI_COLOR[t.priority]}"></span>${T(t.priority)}</span>
+        ${t.due_date?`<span class="chip">${T('dueDate')}: ${fmtDate(t.due_date)}</span>`:''}
+        <div class="spacer"></div><span class="num" style="font-weight:600">${t.progress}%</span>
+      </div>
+      <div class="bar" style="margin-bottom:16px"><i style="width:${t.progress}%"></i></div>
+      ${t.description?`<p style="white-space:pre-wrap;margin:0 0 16px">${esc(t.description)}</p>`:''}
+      <div class="eyebrow" style="margin-bottom:6px">${T('checklist')}</div>
+      <div id="chkList">${items.length?drawChecklist(items):`<p class="tiny muted" style="padding:8px 0">${T('noData')}</p>`}</div>
+      <div class="row" style="margin-top:10px">
+        <input class="inp" id="chkNew" placeholder="${T('addChecklistItem')}">
+        <button class="btn btn-primary" id="chkAdd">${T('add')}</button>
+      </div>`,
+    footer:`<button class="btn" data-close>${T('close')}</button>
+            <button class="btn btn-danger" id="tdDel">${T('del')}</button>
+            <button class="btn btn-primary" id="tdEdit">${T('edit')}</button>`});
+
+  const bind=()=>{
+    $$('#chkList [data-chk] input').forEach(cb=>cb.onchange=async()=>{
+      const cid=cb.closest('[data-chk]').dataset.chk;
+      try{ await DB.update('task_checklist',cid,{is_done:cb.checked}); await reload(); }catch(e){ toast(e.message,'err'); }});
+    $$('#chkList [data-chkdel]').forEach(b=>b.onclick=async()=>{
+      try{ await DB.remove('task_checklist',b.dataset.chkdel); await reload(); }catch(e){ toast(e.message,'err'); }});
+  };
+  const reload=async()=>{
+    const [[nt], nl] = await Promise.all([
+      DB.select('tasks',`select=progress,status&id=eq.${t.id}`),
+      DB.select('task_checklist',`select=*&task_id=eq.${t.id}&order=sort_order.asc,created_at.asc`)
+    ]);
+    $('#chkList').innerHTML = nl.length?drawChecklist(nl):`<p class="tiny muted" style="padding:8px 0">${T('noData')}</p>`;
+    bind();
+    const bar=$('.modal-body .bar>i'); if(bar&&nt) bar.style.width=nt.progress+'%';
+  };
+  $('#chkAdd').onclick=async()=>{
+    const txt=val('chkNew'); if(!txt) return;
+    try{
+      await DB.insert('task_checklist',{owner_id:S.profile.id,task_id:t.id,text:txt,sort_order:items.length});
+      $('#chkNew').value=''; await reload();
+    }catch(e){ toast(e.message,'err'); }
+  };
+  $('#chkNew').onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); $('#chkAdd').click(); } };
+  $('#tdEdit').onclick=()=>{ Modal.close(); setTimeout(()=>dailyTaskForm(t),120); };
+  $('#tdDel').onclick=()=>Modal.confirm(T('confirmDelete'),T('confirmDeleteBody'),async()=>{
+    await DB.remove('tasks',t.id); Modal.close(); toast(T('deletedOk'),'ok'); render();
+  });
+  bind();
+}
 
 /* ===================== CALENDAR ===================== */
 VIEWS.calendar = async (v)=>{
