@@ -1,11 +1,7 @@
 // Netlify Function — resolves a username or phone number to its account email.
-// Runs server-side with a direct Postgres connection, so it doesn't depend on
-// the Data API's anonymous-role path (which proved unreliable for unauthenticated calls).
+// Uses Neon's HTTP SQL endpoint directly via fetch, so it needs NO npm dependencies
+// (avoids any "module not found" bundling issue). Runs server-side with DATABASE_URL.
 // Only ever returns an email string or null — never any other profile data.
-
-const { neon } = require('@neondatabase/serverless');
-
-const sql = neon(process.env.DATABASE_URL);
 
 exports.handler = async (event) => {
   const headers = {
@@ -18,10 +14,9 @@ exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers };
   if (event.httpMethod !== 'POST') return { statusCode: 405, headers, body: '{"error":"Method not allowed"}' };
 
-  if (!process.env.DATABASE_URL) {
-    return { statusCode: 500, headers, body: JSON.stringify({
-      error: 'DATABASE_URL is not set on this site. Add it in Netlify → Site settings → Environment variables.'
-    })};
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl) {
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'DATABASE_URL not set' }) };
   }
 
   let payload;
@@ -31,12 +26,38 @@ exports.handler = async (event) => {
   const identifier = (payload.identifier || '').trim();
   if (!identifier) return { statusCode: 400, headers, body: '{"error":"Missing identifier"}' };
 
+  // Build Neon's HTTP SQL endpoint from the Postgres connection string.
+  let host, sqlUrl;
   try {
-    const rows = await sql`
-      SELECT lower(email) AS email FROM profiles
-      WHERE lower(username) = lower(${identifier}) OR phone = ${identifier}
-      LIMIT 1
-    `;
+    const u = new URL(dbUrl);
+    host = u.hostname.replace('-pooler', '');
+    sqlUrl = `https://${host}/sql`;
+  } catch (e) {
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'bad DATABASE_URL', detail: e.message }) };
+  }
+
+  try {
+    const r = await fetch(sqlUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Neon-Connection-String': dbUrl,
+        'Neon-Raw-Text-Output': 'true',
+        'Neon-Array-Mode': 'false'
+      },
+      body: JSON.stringify({
+        query: 'SELECT lower(email) AS email FROM profiles WHERE lower(username) = lower($1) OR phone = $1 LIMIT 1',
+        params: [identifier]
+      })
+    });
+
+    if (!r.ok) {
+      const t = await r.text().catch(() => '');
+      return { statusCode: 502, headers, body: JSON.stringify({ error: 'db_http_error', status: r.status, detail: t.slice(0, 300) }) };
+    }
+
+    const data = await r.json();
+    const rows = data.rows || [];
     const email = rows.length ? rows[0].email : null;
     return { statusCode: 200, headers, body: JSON.stringify({ email }) };
   } catch (err) {
