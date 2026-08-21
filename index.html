@@ -819,15 +819,27 @@ const DB = {
       r = await fetch(CFG.API_URL+`/rpc/${fn}`,{
         method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(args)
       });
-    }catch(e){ throw new Error('network'); }
+    }catch(e){ console.error('rpcAnon network error:',e); throw new Error('network'); }
     if(!r.ok){
-      // A non-2xx here means the service call itself failed (permissions, stale schema cache, etc.) —
-      // that's different from "no match found" and should surface as an error, not a false negative.
+      const bodyTxt = await r.text().catch(()=> '');
+      console.error('rpcAnon HTTP', r.status, fn, bodyTxt);
       if(r.status===404) throw new Error('service_unavailable');
       throw new Error('http_'+r.status);
     }
     const txt=await r.text(); if(!txt) return null;
-    try{ return JSON.parse(txt); }catch(_){ return null; }
+    let data;
+    try{ data=JSON.parse(txt); }catch(_){ return null; }
+    // PostgREST can return a scalar function's result several ways depending on config —
+    // handle all of them so the client never mis-reads a valid match as "not found".
+    if(data==null) return null;
+    if(Array.isArray(data)){
+      if(!data.length) return null;
+      const first=data[0];
+      if(first && typeof first==='object') return Object.values(first)[0] ?? null;
+      return first;
+    }
+    if(typeof data==='object') return Object.values(data)[0] ?? null;
+    return data; // already a plain string/scalar
   },
   async insert(t,row){
     const d=await this.req(`/${t}`,{method:'POST',body:row,prefer:'return=representation'});
