@@ -470,7 +470,8 @@ table.tbl tbody tr:last-child td{border-bottom:0}
 const CFG = {
   AUTH_URL: 'https://ep-empty-cell-ay8l4nc2.neonauth.c-5.us-east-2.aws.neon.tech/neondb/auth',
   API_URL : 'https://ep-empty-cell-ay8l4nc2.apirest.c-5.us-east-2.aws.neon.tech/neondb/rest/v1',
-  AI_FN   : '/.netlify/functions/assistant'
+  AI_FN   : '/.netlify/functions/assistant',
+  RESOLVE_LOGIN_FN : '/.netlify/functions/resolve-login'
 };
 
 /* ===================== I18N ===================== */
@@ -2778,14 +2779,17 @@ $('#authForm').onsubmit = async e=>{
       if(email.includes('@')){
         email = email.toLowerCase();
       } else {
-        let resolved;
+        let resp;
         try{
-          resolved = await DB.rpcAnon('lookup_login_identifier',{p_identifier:email});
-        }catch(e){
-          return fail(e.message==='network' ? T('networkError') : T('serviceUnavailable'));
-        }
-        if(!resolved) return fail(T('identifierNotFound'));
-        email = resolved;
+          resp = await fetch(CFG.RESOLVE_LOGIN_FN,{
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({identifier:email})
+          });
+        }catch(e){ return fail(T('networkError')); }
+        if(!resp.ok) return fail(T('serviceUnavailable'));
+        const data = await resp.json().catch(()=>({}));
+        if(!data.email) return fail(T('identifierNotFound'));
+        email = data.email;
       }
       await Auth.signIn(email, pass);
     }
