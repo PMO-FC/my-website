@@ -2786,7 +2786,11 @@ $('#authForm').onsubmit = async e=>{
             body:JSON.stringify({identifier:email})
           });
         }catch(e){ return fail(T('networkError')); }
-        if(!resp.ok) return fail(T('serviceUnavailable'));
+        if(!resp.ok){
+          const errData = await resp.json().catch(()=>({}));
+          console.error('resolve-login failed:', resp.status, errData);
+          return fail(T('serviceUnavailable'));
+        }
         const data = await resp.json().catch(()=>({}));
         if(!data.email) return fail(T('identifierNotFound'));
         email = data.email;
