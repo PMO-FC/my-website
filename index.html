@@ -411,6 +411,12 @@ table.tbl tbody tr:last-child td{border-bottom:0}
           <label data-i18n="confirmPassword"></label>
           <input class="inp" id="iPassConfirm" type="password" autocomplete="new-password" minlength="8">
         </div>
+        <div class="field hide" id="fTerms" style="display:flex;align-items:flex-start;gap:8px;margin-top:2px">
+          <input type="checkbox" id="iTerms" style="width:17px;height:17px;margin-top:2px;accent-color:var(--accent);cursor:pointer;flex:none">
+          <label for="iTerms" style="font-size:12.5px;color:var(--text-2);cursor:pointer;margin:0">
+            <span data-i18n="agreeToTerms"></span> <a href="#" id="openTermsLink" style="color:var(--accent);text-decoration:underline" data-i18n="termsLink"></a>
+          </label>
+        </div>
         <button class="btn btn-primary btn-block" id="authSubmit" type="submit" style="margin-top:6px"></button>
       </form>
       <div class="auth-foot" id="authNote"></div>
@@ -598,6 +604,16 @@ ar:{
   totalUsers:'إجمالي المستخدمين', pendingUsers:'قيد المراجعة', activeUsers:'مفعّلون',
   disabledUsers:'معطّلون', activate:'تفعيل', disable:'تعطيل', setPending:'إرجاع للمراجعة',
   userDetails:'بيانات المستخدم', joined:'تاريخ التسجيل', lastLogin:'آخر دخول', viewWorkspace:'عرض مساحة العمل',
+  billing:'الاشتراك', currentPlan:'الخطة الحالية', choosePlan:'اختر خطتك', monthly:'شهري', yearly:'سنوي',
+  free_price:'مجاني', perMonth:'شهريًا', perYear:'سنويًا', currentPlanBtn:'خطتك الحالية', choosePlanBtn:'اشترك',
+  trialing:'تجريبي', pendingPayment:'بانتظار الدفع', activePlan:'نشطة', pastDue:'متأخرة السداد',
+  cancelledPlan:'ملغاة', expiredPlan:'منتهية', renewsOn:'يتجدد في',
+  pendingPaymentNote:'سيتم تفعيل الخطة يدويًا من قبل المشرف لحين ربط بوابة دفع إلكترونية. سنتواصل معك فور التفعيل.',
+  pendingPaymentIntro:'سيتم إرسال طلبك للمراجعة، وتُفعَّل الخطة يدويًا حاليًا لحين ربط بوابة الدفع الإلكتروني.',
+  confirmRequest:'تأكيد الطلب', requestSentOk:'تم إرسال طلبك بنجاح',
+  billingFooterNote:'باستخدامك المنصة فإنك توافق على',
+  termsLink:'الشروط والأحكام', termsTitle:'الشروط والأحكام',
+  agreeToTerms:'أوافق على', mustAcceptTerms:'يجب الموافقة على الشروط والأحكام للمتابعة',
   accessDuration:'مدة الوصول', noExpiry:'بدون انتهاء', oneWeek:'أسبوع', oneMonth:'شهر', threeMonths:'3 أشهر',
   sixMonths:'6 أشهر', oneYear:'سنة', customDate:'تاريخ محدد', expiresOn:'ينتهي في', expired:'منتهي', activateFor:'تفعيل لمدة',
   /* ai */
@@ -698,6 +714,16 @@ en:{
   totalUsers:'Total users', pendingUsers:'Pending', activeUsers:'Active',
   disabledUsers:'Disabled', activate:'Activate', disable:'Disable', setPending:'Set pending',
   userDetails:'User details', joined:'Joined', lastLogin:'Last login', viewWorkspace:'View workspace',
+  billing:'Billing', currentPlan:'Current plan', choosePlan:'Choose your plan', monthly:'Monthly', yearly:'Yearly',
+  free_price:'Free', perMonth:'/ month', perYear:'/ year', currentPlanBtn:'Current plan', choosePlanBtn:'Subscribe',
+  trialing:'Trial', pendingPayment:'Pending payment', activePlan:'Active', pastDue:'Past due',
+  cancelledPlan:'Cancelled', expiredPlan:'Expired', renewsOn:'Renews on',
+  pendingPaymentNote:"This plan will be activated manually by an admin until an online payment gateway is connected. We'll follow up once it's active.",
+  pendingPaymentIntro:'Your request will be reviewed. Plans are currently activated manually pending an online payment gateway integration.',
+  confirmRequest:'Confirm request', requestSentOk:'Request sent',
+  billingFooterNote:'By using this platform you agree to the',
+  termsLink:'Terms & Conditions', termsTitle:'Terms & Conditions',
+  agreeToTerms:'I agree to the', mustAcceptTerms:'You must accept the Terms & Conditions to continue',
   accessDuration:'Access duration', noExpiry:'No expiry', oneWeek:'1 week', oneMonth:'1 month', threeMonths:'3 months',
   sixMonths:'6 months', oneYear:'1 year', customDate:'Custom date', expiresOn:'Expires on', expired:'Expired', activateFor:'Activate for',
   aiTitle:'Project assistant', aiSub:'Reads only your data',
@@ -991,6 +1017,7 @@ const NAV = [
   ]},
   {sec:'navSys', items:[
     {k:'notifications', icon:'M12 22a2 2 0 002-2h-4a2 2 0 002 2zM18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8', badge:true},
+    {k:'billing',       icon:'M2 8h20M2 8a2 2 0 012-2h16a2 2 0 012 2M2 8v9a2 2 0 002 2h16a2 2 0 002-2V8M6 15h4'},
     {k:'settings',      icon:'M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-1.8-.3 1.6 1.6 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.6 1.6 0 00-1-1.5 1.6 1.6 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.6 1.6 0 00.3-1.8 1.6 1.6 0 00-1.5-1H3a2 2 0 110-4h.1a1.6 1.6 0 001.5-1 1.6 1.6 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.6 1.6 0 001.8.3H9a1.6 1.6 0 001-1.5V3a2 2 0 114 0v.1a1.6 1.6 0 001 1.5 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8V9a1.6 1.6 0 001.5 1H21a2 2 0 110 4h-.1a1.6 1.6 0 00-1.5 1z'},
     {k:'admin',         icon:'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8', admin:true}
   ]}
@@ -2570,11 +2597,119 @@ VIEWS.settings = async (v)=>{
 };
 
 /* ===================== ADMIN ===================== */
+/* ===================== BILLING / SUBSCRIPTION (shape-only — real gateway not connected yet) ===================== */
+VIEWS.billing = async (v)=>{
+  const [plans, sub] = await Promise.all([
+    DB.select('plans','select=*&is_active=eq.true&order=sort_order.asc'),
+    DB.rpc('my_subscription')
+  ]);
+  const current = sub && sub.plan ? sub : null;
+  const cycle = S.cache.billingCycle || 'monthly';
+
+  const statusBadge = s => {
+    const map = {trialing:'b-teal', pending_payment:'b-amber', active:'b-green', past_due:'b-amber', cancelled:'b-gray', expired:'b-rose'};
+    const label = {trialing:T('trialing'), pending_payment:T('pendingPayment'), active:T('activePlan'),
+      past_due:T('pastDue'), cancelled:T('cancelledPlan'), expired:T('expiredPlan')};
+    return `<span class="badge ${map[s]||'b-gray'}">${label[s]||s}</span>`;
+  };
+
+  v.innerHTML = `<div class="stack" style="max-width:920px">
+    ${current ? `<div class="card card-pad">
+        <div class="row row-wrap">
+          <div style="flex:1;min-width:200px">
+            <div class="eyebrow">${T('currentPlan')}</div>
+            <div style="font-size:19px;font-weight:600;margin-top:3px">${esc(LANG==='ar'?current.plan.name_ar:current.plan.name_en)}</div>
+          </div>
+          ${statusBadge(current.status)}
+        </div>
+        ${current.status==='pending_payment'?`<p class="tiny muted" style="margin-top:10px">${T('pendingPaymentNote')}</p>`:''}
+        ${current.current_period_end?`<p class="tiny muted" style="margin-top:6px">${T('renewsOn')}: ${fmtDate(current.current_period_end)}</p>`:''}
+      </div>` : ''}
+
+    <div class="row"><h2 style="flex:1">${T('choosePlan')}</h2>
+      <div class="pill-tabs">
+        <button class="${cycle==='monthly'?'on':''}" data-cycle="monthly">${T('monthly')}</button>
+        <button class="${cycle==='yearly'?'on':''}" data-cycle="yearly">${T('yearly')}</button>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+      ${plans.map(p=>{
+        const price = cycle==='monthly' ? p.price_monthly : p.price_yearly;
+        const isCurrent = current && current.plan.code===p.code && ['active','pending_payment','trialing'].includes(current.status);
+        return `<div class="card card-pad" style="${isCurrent?'border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)':''}">
+          <div style="font-weight:600;font-size:16px">${esc(LANG==='ar'?p.name_ar:p.name_en)}</div>
+          <div style="margin:10px 0"><span class="num" style="font-size:26px;font-weight:600">${price>0?fmtMoney(price,p.currency):T('free_price')}</span>
+            ${price>0?`<span class="tiny muted">/ ${cycle==='monthly'?T('perMonth'):T('perYear')}</span>`:''}</div>
+          <div class="stack" style="gap:6px;margin:14px 0">
+            ${(p.features||[]).map(f=>`<div class="row tiny" style="gap:7px"><span style="color:var(--green-600)">✓</span>${esc(f)}</div>`).join('')}
+          </div>
+          <button class="btn ${isCurrent?'':'btn-primary'} btn-block" ${isCurrent?'disabled':''} data-plan="${p.code}">
+            ${isCurrent?T('currentPlanBtn'):T('choosePlanBtn')}</button>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="card card-pad">
+      <p class="tiny muted" style="margin:0">${T('billingFooterNote')}
+        <a href="#" id="viewTerms" style="color:var(--accent);text-decoration:underline">${T('termsLink')}</a></p>
+    </div>
+  </div>`;
+
+  $$('[data-cycle]').forEach(b=>b.onclick=()=>{ S.cache.billingCycle=b.dataset.cycle; render(); });
+  $$('[data-plan]').forEach(b=>b.onclick=async()=>{
+    const code=b.dataset.plan;
+    if(code==='free'){
+      try{ await DB.rpc('start_subscription',{p_plan_code:'free',p_cycle:cycle}); toast(T('savedOk'),'ok'); render(); }
+      catch(e){ toast(e.message,'err'); }
+      return;
+    }
+    Modal.open({slim:true, title:T('choosePlanBtn'),
+      body:`<p class="muted" style="margin:0 0 10px">${T('pendingPaymentIntro')}</p>
+        <p class="tiny muted">${T('pendingPaymentNote')}</p>`,
+      footer:`<button class="btn" data-close>${T('cancel')}</button>
+              <button class="btn btn-primary" id="confirmSub">${T('confirmRequest')}</button>`});
+    $('#confirmSub').onclick=async()=>{
+      try{
+        await DB.rpc('start_subscription',{p_plan_code:code,p_cycle:cycle});
+        Modal.close(); toast(T('requestSentOk'),'ok'); render();
+      }catch(e){ toast(e.message,'err'); }
+    };
+  });
+  $('#viewTerms').onclick=e=>{ e.preventDefault(); showTermsModal(); };
+};
+
+/* ---------- Terms & Conditions content (shared by sign-up gate and Billing footer) ---------- */
+function termsHtml(){
+  return LANG==='ar' ? `
+    <div class="stack" style="gap:14px;font-size:13.5px;line-height:1.9">
+      <div><h3>1. طبيعة الخدمة</h3><p class="muted">ProjectHub منصة إدارة مشاريع تُقدَّم "كما هي" (As-Is). نعمل على تحسينها باستمرار وقد تتغير الميزات دون إشعار مسبق أثناء مرحلة التطوير.</p></div>
+      <div><h3>2. الحساب والاستخدام</h3><p class="muted">أنت مسؤول عن سرية بيانات دخولك، وعن دقة البيانات التي تُدخلها. يُمنع استخدام المنصة لأي غرض غير قانوني.</p></div>
+      <div><h3>3. البيانات والخصوصية</h3><p class="muted">بياناتك معزولة بالكامل عن بيانات أي مستخدم آخر على مستوى قاعدة البيانات. لا نشارك بياناتك مع أي طرف ثالث لأغراض تسويقية.</p></div>
+      <div><h3>4. الاشتراكات والدفع</h3><p class="muted">الخطط المدفوعة تُفعَّل يدويًا حاليًا لحين ربط بوابة دفع إلكترونية معتمدة. الأسعار المعروضة قابلة للتغيير مع إشعار مسبق.</p></div>
+      <div><h3>5. إنهاء الخدمة</h3><p class="muted">يحق لك إغلاق حسابك في أي وقت. نحتفظ بحق تعليق الحسابات المخالفة لهذه الشروط.</p></div>
+      <div><h3>6. التواصل</h3><p class="muted">لأي استفسار بخصوص هذه الشروط، تواصل مع مدير المنصة.</p></div>
+    </div>` : `
+    <div class="stack" style="gap:14px;font-size:13.5px;line-height:1.9">
+      <div><h3>1. Service Nature</h3><p class="muted">ProjectHub is a project management platform provided "as-is." We continuously improve it, and features may change without prior notice during active development.</p></div>
+      <div><h3>2. Account & Usage</h3><p class="muted">You're responsible for keeping your login credentials confidential and for the accuracy of data you enter. Using the platform for any unlawful purpose is prohibited.</p></div>
+      <div><h3>3. Data & Privacy</h3><p class="muted">Your data is fully isolated from every other user at the database level. We do not share your data with third parties for marketing purposes.</p></div>
+      <div><h3>4. Subscriptions & Payment</h3><p class="muted">Paid plans are currently activated manually pending a certified payment gateway integration. Displayed prices may change with prior notice.</p></div>
+      <div><h3>5. Termination</h3><p class="muted">You may close your account at any time. We reserve the right to suspend accounts that violate these terms.</p></div>
+      <div><h3>6. Contact</h3><p class="muted">For any questions about these terms, contact the platform administrator.</p></div>
+    </div>`;
+}
+function showTermsModal(){
+  Modal.open({wide:true, title:T('termsTitle'), body:termsHtml(),
+    footer:`<button class="btn btn-primary" data-close>${T('close')}</button>`});
+}
+
 VIEWS.admin = async (v)=>{
   if(!S.profile.is_admin){ v.innerHTML=emptyState(T('noData'),''); return; }
-  const [stats, users] = await Promise.all([
+  const [stats, users, subs] = await Promise.all([
     DB.rpc('admin_stats'),
-    DB.select('v_admin_users','select=*&order=created_at.desc')
+    DB.select('v_admin_users','select=*&order=created_at.desc'),
+    DB.select('v_admin_subscriptions','select=*&status=eq.pending_payment&order=created_at.asc')
   ]);
   const kpi=(l,val,c)=>`<div class="kpi" style="--k:${c}"><div class="kpi-label">${l}</div><div class="kpi-value">${val}</div></div>`;
   v.innerHTML=`<div class="stack">
@@ -2586,6 +2721,18 @@ VIEWS.admin = async (v)=>{
       ${kpi(T('totalProjects'),stats.total_projects,'var(--violet-500)')}
       ${kpi(T('tasks'),stats.total_tasks,'var(--slate-500)')}
     </div>
+    ${subs.length ? `<div class="card">
+      <div class="card-head"><span class="badge b-amber">${T('pendingPayment')}</span><h2 style="flex:1">${T('billing')}</h2>
+        <span class="tiny muted num">${subs.length}</span></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>${T('fullName')}</th><th>${T('email')}</th><th>${T('choosePlan')}</th><th></th></tr></thead>
+        <tbody>${subs.map(s=>`<tr>
+          <td class="cell-strong">${esc(s.full_name||'—')}</td>
+          <td class="tiny">${esc(s.email||'—')}</td>
+          <td class="tiny">${esc(LANG==='ar'?s.plan_name_ar:s.plan_name_en)} · ${T(s.billing_cycle)}</td>
+          <td><button class="btn btn-sm btn-primary" data-subactivate="${s.id}">${T('activate')}</button></td>
+        </tr>`).join('')}</tbody>
+      </table></div></div>` : ''}
     <div class="card">
       <div class="card-head"><h2>${T('admin')}</h2>
         <select class="inp" id="aFilter" style="max-width:160px">
@@ -2629,6 +2776,13 @@ VIEWS.admin = async (v)=>{
       async()=>{ await DB.remove('profiles',b.dataset.udel); toast(T('deletedOk'),'ok'); render(); }));
   };
   $('#aFilter').onchange=draw; draw();
+
+  $$('[data-subactivate]').forEach(b=>b.onclick=async()=>{
+    try{
+      await DB.rpc('admin_set_subscription_status',{p_sub_id:b.dataset.subactivate,p_status:'active'});
+      toast(T('savedOk'),'ok'); render();
+    }catch(e){ toast(e.message,'err'); }
+  });
 };
 
 /* ---------- ADMIN: activate with an optional access duration ---------- */
@@ -2769,6 +2923,7 @@ function renderAuthTexts(){
   $('#iIdentifier').required = authMode==='signin';
   $('#iEmail').required = authMode==='signup';
   $('#iPass').autocomplete = authMode==='signin'?'current-password':'new-password';
+  $('#fTerms').classList.toggle('hide', authMode!=='signup');
 }
 $$('.auth-toggle button').forEach(b=>b.onclick=()=>{
   authMode=b.dataset.mode;
@@ -2786,12 +2941,14 @@ $('#authForm').onsubmit = async e=>{
       const email=val('iEmail').toLowerCase(), confirm=$('#iPassConfirm').value;
       if(!email) return fail(T('requiredField'));
       if(pass!==confirm) return fail(T('passwordMismatch'));
+      if(!$('#iTerms').checked) return fail(T('mustAcceptTerms'));
       const first=val('iFirst'), last=val('iLast');
       const fullName = [first,last].filter(Boolean).join(' ') || email.split('@')[0];
 
       await Auth.signUp(email, pass, fullName);
       // Establish the profile row, then attach the extra sign-up fields.
       await DB.rpc('bootstrap_profile',{p_email:email, p_name:fullName});
+      try{ await DB.rpc('accept_terms',{p_version:'1.0'}); }catch(_){}
       try{
         await DB.rpc('set_signup_details',{
           p_first: first||null, p_last: last||null,
@@ -2832,6 +2989,7 @@ $('#authForm').onsubmit = async e=>{
 };
 $('#authLangBtn').onclick=()=>setLang(LANG==='ar'?'en':'ar',false);
 $('#authThemeBtn').onclick=toggleTheme;
+$('#openTermsLink').onclick=e=>{ e.preventDefault(); showTermsModal(); };
 $('#pendingRecheck').onclick=()=>boot();
 $('#pendingOut').onclick=doSignOut;
 
