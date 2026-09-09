@@ -632,7 +632,45 @@ ar:{
   not_started:'لم يبدأ', active:'نشط', on_hold:'معلّق', at_risk:'معرّض للخطر',
   loadError:'تعذّر تحميل البيانات', savedOk:'تم الحفظ بنجاح', deletedOk:'تم الحذف',
   requiredField:'هذا الحقل مطلوب', days:'يوم', of:'من', noData:'لا توجد بيانات',
-  planned:'مخطط', actual:'فعلي', project:'المشروع', task:'مهمة', meeting:'اجتماع'
+  planned:'مخطط', actual:'فعلي', project:'المشروع', task:'مهمة', meeting:'اجتماع',
+  /* ===== EVENTS MODULE ===== */
+  events:'الفعاليات', eventsTitle:'الفعاليات الأمنية', newEvent:'فعالية جديدة',
+  activeEvents:'فعاليات نشطة', upcomingEvents:'فعاليات قادمة', completedEvents:'فعاليات مكتملة',
+  draftEvents:'مسودات', eventsThisMonth:'فعاليات هذا الشهر', startingWithin30:'تبدأ خلال 30 يومًا',
+  totalPlannedStaffing:'إجمالي وحدات الطاقم المخطط', pendingApprovals:'اعتمادات معلّقة',
+  eventName:'اسم الفعالية', client:'العميل', locationType:'نوع الموقع', saudiArabia:'السعودية',
+  gccCountries:'دول الخليج', country:'الدولة', city:'المدينة',
+  wizStep1:'معلومات الفعالية', wizStep2:'الجدول الزمني', wizStep3:'الطاقم والمعدات', wizStep4:'المراجعة والإنشاء',
+  saveAsDraft:'حفظ كمسودة', next:'التالي', previous:'السابق',
+  mainPhasePre:'ما قبل الفعالية', mainPhaseLive:'الفعالية الحية', mainPhasePost:'ما بعد الفعالية',
+  addSubPhase:'إضافة مرحلة فرعية', phaseName:'اسم المرحلة', dateType:'نوع التاريخ',
+  singleDay:'يوم واحد', dateRange:'مدى زمني', subPhaseTemplate:'قالب المرحلة',
+  addManpower:'إضافة طاقم', role:'الدور', staffPerShift:'عدد الأفراد بالشفت', numberOfShifts:'عدد الشفتات',
+  numberOfDays:'عدد الأيام', dailyRate:'السعر اليومي', dailyCost:'التكلفة اليومية',
+  calculatedUnits:'الوحدات المحسوبة', shift1:'شفت 1', shift2:'شفت 2', shift3:'شفت 3',
+  addEquipment:'إضافة معدات', equipmentName:'اسم المعدة', quantity:'الكمية', unit:'الوحدة',
+  pricingType:'نوع التسعير', perDay:'يوميًا', oneTime:'مرة واحدة', unitCost:'تكلفة الوحدة', unitPrice:'سعر الوحدة',
+  reviewSummary:'ملخص المراجعة', totalDuration:'المدة الإجمالية', manpowerTotals:'إجمالي الطاقم',
+  equipmentTotals:'إجمالي المعدات', createEvent:'إنشاء الفعالية',
+  eventOverview:'نظرة عامة', eventTimeline:'الجدول الزمني', eventManpower:'الطاقم', eventEquipment:'المعدات',
+  eventRoster:'كشف العمل', eventTimesheet:'كشف الحضور', eventFinancial:'الملخص المالي',
+  projectStartsIn:'تبدأ الفعالية خلال', projectDay:'يوم الفعالية', completedDaysAgo:'اكتملت منذ',
+  daysRemaining:'الأيام المتبقية', totalDays:'إجمالي الأيام', elapsedDays:'الأيام المنقضية',
+  peakStaffPerShift:'ذروة الطاقم بالشفت', equipmentItems:'عدد أصناف المعدات',
+  addWorker:'إضافة عامل', workerName:'اسم العامل', assignToRoster:'إضافة لكشف العمل',
+  attendanceGrid:'شبكة الحضور', present:'حاضر', absent:'غائب', noShow:'لم يحضر', late:'متأخر', excused:'معذور',
+  markAttendance:'تسجيل الحضور', submitTimesheet:'إرسال كشف الحضور للاعتماد', timesheetStatus:'حالة الكشف',
+  tsDraft:'مسودة', tsSubmitted:'مُرسل', tsReviewed:'تمت المراجعة', tsApproved:'معتمد',
+  tsPayrollReady:'جاهز للرواتب', tsLocked:'مُقفل', approveTimesheet:'اعتماد الكشف',
+  totalPayable:'إجمالي المستحق', periodStart:'بداية الفترة', periodEnd:'نهاية الفترة',
+  noEvents:'لا توجد فعاليات', noEventsBody:'أنشئ أول فعالية أمنية وابدأ بتخطيط الجدول الزمني والطاقم.',
+  noPhases:'لا توجد مراحل بعد', noRoster:'كشف العمل فارغ', addPhaseFirst:'أضف مرحلة أولاً',
+  eventsSettings:'إعدادات الفعاليات', manpowerRoles:'أدوار الطاقم', equipmentCatalog:'كتالوج المعدات',
+  phaseTemplates:'قوالب المراحل', locations:'المواقع', defaultDailyRate:'السعر الافتراضي',
+  defaultDailyCost:'التكلفة الافتراضية', newRole:'دور جديد', newEquipment:'معدة جديدة',
+  draft:'مسودة', planning:'تخطيط', pending_approval:'بانتظار الاعتماد', approved:'معتمد',
+  upcoming:'قادمة', archived:'مؤرشفة',
+  approveTimesheetWarning:'سيُقفل تعديل الحضور بعد الاعتماد ولا يمكن التراجع.'
 },
 en:{
   dir:'ltr',
@@ -740,7 +778,45 @@ en:{
   not_started:'Not started', active:'Active', on_hold:'On hold', at_risk:'At risk',
   loadError:'Could not load data', savedOk:'Saved', deletedOk:'Deleted',
   requiredField:'This field is required', days:'days', of:'of', noData:'No data',
-  planned:'Planned', actual:'Actual', project:'Project', task:'Task', meeting:'Meeting'
+  planned:'Planned', actual:'Actual', project:'Project', task:'Task', meeting:'Meeting',
+  /* ===== EVENTS MODULE ===== */
+  events:'Events', eventsTitle:'Security Events', newEvent:'New Event',
+  activeEvents:'Active Events', upcomingEvents:'Upcoming Events', completedEvents:'Completed Events',
+  draftEvents:'Drafts', eventsThisMonth:'Events This Month', startingWithin30:'Starting Within 30 Days',
+  totalPlannedStaffing:'Total Planned Staffing Units', pendingApprovals:'Pending Approvals',
+  eventName:'Event Name', client:'Client', locationType:'Location Type', saudiArabia:'Saudi Arabia',
+  gccCountries:'GCC Countries', country:'Country', city:'City',
+  wizStep1:'Project Information', wizStep2:'Timeline', wizStep3:'Manpower & Equipment', wizStep4:'Review & Create',
+  saveAsDraft:'Save as Draft', next:'Next', previous:'Previous',
+  mainPhasePre:'Pre-Event', mainPhaseLive:'Live-Event', mainPhasePost:'Post-Event',
+  addSubPhase:'Add Sub-Phase', phaseName:'Phase Name', dateType:'Date Type',
+  singleDay:'Single Day', dateRange:'Date Range', subPhaseTemplate:'Phase Template',
+  addManpower:'Add Manpower', role:'Role', staffPerShift:'Staff Per Shift', numberOfShifts:'Number of Shifts',
+  numberOfDays:'Number of Days', dailyRate:'Daily Rate', dailyCost:'Daily Cost',
+  calculatedUnits:'Calculated Units', shift1:'Shift 1', shift2:'Shift 2', shift3:'Shift 3',
+  addEquipment:'Add Equipment', equipmentName:'Equipment Name', quantity:'Quantity', unit:'Unit',
+  pricingType:'Pricing Type', perDay:'Per Day', oneTime:'One-Time', unitCost:'Unit Cost', unitPrice:'Unit Price',
+  reviewSummary:'Review Summary', totalDuration:'Total Duration', manpowerTotals:'Manpower Totals',
+  equipmentTotals:'Equipment Totals', createEvent:'Create Event',
+  eventOverview:'Overview', eventTimeline:'Timeline', eventManpower:'Manpower', eventEquipment:'Equipment',
+  eventRoster:'Roster', eventTimesheet:'Time Sheet', eventFinancial:'Financial Summary',
+  projectStartsIn:'Project Starts In', projectDay:'Project Day', completedDaysAgo:'Completed days ago',
+  daysRemaining:'Days Remaining', totalDays:'Total Days', elapsedDays:'Elapsed Days',
+  peakStaffPerShift:'Peak Staff/Shift', equipmentItems:'Equipment Items',
+  addWorker:'Add Worker', workerName:'Worker Name', assignToRoster:'Add to Roster',
+  attendanceGrid:'Attendance Grid', present:'Present', absent:'Absent', noShow:'No Show', late:'Late', excused:'Excused',
+  markAttendance:'Mark Attendance', submitTimesheet:'Submit for Approval', timesheetStatus:'Timesheet Status',
+  tsDraft:'Draft', tsSubmitted:'Submitted', tsReviewed:'Reviewed', tsApproved:'Approved',
+  tsPayrollReady:'Payroll Ready', tsLocked:'Locked', approveTimesheet:'Approve Timesheet',
+  totalPayable:'Total Payable', periodStart:'Period Start', periodEnd:'Period End',
+  noEvents:'No events yet', noEventsBody:'Create your first security event and start planning its timeline and staffing.',
+  noPhases:'No phases yet', noRoster:'Roster is empty', addPhaseFirst:'Add a phase first',
+  eventsSettings:'Events Settings', manpowerRoles:'Manpower Roles', equipmentCatalog:'Equipment Catalog',
+  phaseTemplates:'Phase Templates', locations:'Locations', defaultDailyRate:'Default Rate',
+  defaultDailyCost:'Default Cost', newRole:'New Role', newEquipment:'New Equipment',
+  draft:'Draft', planning:'Planning', pending_approval:'Pending Approval', approved:'Approved',
+  upcoming:'Upcoming', archived:'Archived',
+  approveTimesheetWarning:'Attendance will be locked for editing after approval and cannot be undone.'
 }};
 
 let LANG = localStorage.getItem('kayan_lang') || 'ar';
@@ -911,6 +987,7 @@ const DB = {
 /* ===================== APP STATE ===================== */
 const S = {
   profile:null, route:'dashboard', projectId:null, projectTab:'overview',
+  eventId:null, eventTab:'overview',
   projects:[], stats:{}, health:[], notifCount:0, cache:{}
 };
 </script>
@@ -1008,6 +1085,7 @@ const NAV = [
     {k:'myDay',     icon:'M9 11l2.5 2.5L16 9M21 12a9 9 0 11-18 0 9 9 0 0118 0z'}
   ]},
   {sec:'navWork', items:[
+    {k:'events',    icon:'M4 4h16v4H4zM4 8v12h16V8M9 12h6M9 16h4'},
     {k:'projects',  icon:'M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z'},
     {k:'tasks',     icon:'M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01'},
     {k:'meetings',  icon:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2zM8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01'},
@@ -1041,7 +1119,7 @@ function buildNav(){
 }
 function closeSidebar(){ $('#sidebar').classList.remove('open'); $('#scrim').classList.remove('on'); }
 function go(route, projectId=null, tab='overview'){
-  S.route=route; S.projectId=projectId; S.projectTab=tab;
+  S.route=route; S.projectId=projectId; S.projectTab=tab; S.eventId=null;
   const hash = projectId ? `#/project/${projectId}/${tab}` : `#/${route}`;
   if(location.hash!==hash) history.pushState(null,'',hash);
   render();
@@ -1049,8 +1127,9 @@ function go(route, projectId=null, tab='overview'){
 window.addEventListener('popstate', ()=>{ parseHash(); render(); });
 function parseHash(){
   const h=location.hash.replace(/^#\/?/,'').split('/').filter(Boolean);
-  if(h[0]==='project' && h[1]){ S.route='projects'; S.projectId=h[1]; S.projectTab=h[2]||'overview'; }
-  else { S.route = h[0] || 'dashboard'; S.projectId=null; }
+  if(h[0]==='project' && h[1]){ S.route='projects'; S.projectId=h[1]; S.projectTab=h[2]||'overview'; S.eventId=null; }
+  else if(h[0]==='event' && h[1]){ S.route='events'; S.eventId=h[1]; S.eventTab=h[2]||'overview'; S.projectId=null; }
+  else { S.route = h[0] || 'dashboard'; S.projectId=null; S.eventId=null; }
 }
 
 /* ===================== RENDER DISPATCH ===================== */
@@ -1060,8 +1139,8 @@ async function render(){
   const v=$('#view');
   v.innerHTML='<div class="loading"><div class="spin"></div></div>';
   $('#topActions').innerHTML='';
-  const key = S.projectId ? 'projectDetail' : S.route;
-  $('#pageTitle').textContent = S.projectId ? '…' : T(S.route);
+  const key = S.projectId ? 'projectDetail' : S.eventId ? 'eventDetail' : S.route;
+  $('#pageTitle').textContent = (S.projectId || S.eventId) ? '…' : T(S.route);
   try{
     const fn = VIEWS[key] || VIEWS.dashboard;
     await fn(v);
@@ -2104,6 +2183,793 @@ async function riskForm(r,p){
 }
 </script>
 <script>
+/* =======================================================================
+   EVENTS MODULE — short-term security events (exhibitions, conferences,
+   sports events, ceremonies). Independent from long-term Projects, but
+   reuses the same auth, RLS pattern, admin gate, and design system.
+   ======================================================================= */
+const EOPT = {
+  dateType:()=>[{v:'single',t:T('singleDay')},{v:'range',t:T('dateRange')}],
+  shifts:()=>[{v:'1',t:'1'},{v:'2',t:'2'},{v:'3',t:'3'}],
+  pricing:()=>[{v:'per_day',t:T('perDay')},{v:'one_time',t:T('oneTime')}],
+  eventStatus:()=>['draft','planning','pending_approval','approved','upcoming','active','completed','cancelled','archived'].map(v=>({v,t:T(v)})),
+  locType:()=>[{v:'saudi',t:T('saudiArabia')},{v:'gcc',t:T('gccCountries')}]
+};
+const MAIN_PHASE_LABEL = mp => mp==='pre_event'?T('mainPhasePre'):mp==='live_event'?T('mainPhaseLive'):T('mainPhasePost');
+const MAIN_PHASE_COLOR = {pre_event:'var(--teal-600)', live_event:'var(--violet-500)', post_event:'var(--slate-500)'};
+const TS_LABEL = {draft:T('tsDraft'),submitted:T('tsSubmitted'),reviewed:T('tsReviewed'),approved:T('tsApproved'),payroll_ready:T('tsPayrollReady'),locked:T('tsLocked')};
+const ATT_LABEL = ()=>({present:T('present'),absent:T('absent'),no_show:T('noShow'),late:T('late'),excused:T('excused')});
+const ATT_BADGE = {present:'b-green',absent:'b-rose',no_show:'b-rose',late:'b-amber',excused:'b-gray'};
+
+/* ===================== EVENTS DASHBOARD / LIST ===================== */
+VIEWS.events = async (v)=>{
+  topAction(`+ ${T('newEvent')}`, ()=>eventWizard());
+  const [d, events] = await Promise.all([
+    DB.rpc('events_dashboard'),
+    DB.select('events','select=*&is_archived=eq.false&order=created_at.desc')
+  ]);
+  const progRows = events.length ? await DB.select('v_event_progress',`select=*&event_id=in.(${events.map(e=>e.id).join(',')})`) : [];
+  const progMap = Object.fromEntries(progRows.map(p=>[p.event_id,p]));
+
+  const kpi=(l,val,c)=>`<div class="kpi" style="--k:${c}"><div class="kpi-label">${l}</div><div class="kpi-value">${val}</div></div>`;
+
+  if(!events.length){
+    v.innerHTML = `<div class="stack">
+      <div class="kpis">
+        ${kpi(T('activeEvents'),0,'var(--teal-600)')}${kpi(T('upcomingEvents'),0,'var(--violet-500)')}
+        ${kpi(T('draftEvents'),0,'var(--slate-500)')}${kpi(T('pendingApprovals'),0,'var(--amber-500)')}
+      </div>
+      ${emptyState(T('noEvents'),T('noEventsBody'),T('newEvent'),()=>eventWizard())}
+    </div>`;
+    return;
+  }
+
+  v.innerHTML = `<div class="stack">
+    <div class="kpis">
+      ${kpi(T('activeEvents'), d.active_events,'var(--teal-600)')}
+      ${kpi(T('upcomingEvents'), d.upcoming_events,'var(--violet-500)')}
+      ${kpi(T('eventsThisMonth'), d.events_this_month,'var(--teal-500)')}
+      ${kpi(T('startingWithin30'), d.starting_within_30,'var(--amber-500)')}
+      ${kpi(T('totalPlannedStaffing'), Math.round(d.total_planned_staffing),'var(--green-600)')}
+      ${kpi(T('pendingApprovals'), d.pending_approvals,'var(--rose-600)')}
+    </div>
+    <div class="row row-wrap">
+      <input class="inp" id="evSearch" placeholder="${T('searchProjects')}" style="max-width:260px">
+      <select class="inp" id="evStatus" style="max-width:180px"><option value="">${T('allStatuses')}</option>
+        ${EOPT.eventStatus().map(o=>`<option value="${o.v}">${o.t}</option>`).join('')}</select>
+    </div>
+    <div id="evGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px"></div>
+  </div>`;
+
+  const draw=()=>{
+    const q=$('#evSearch').value.toLowerCase(), st=$('#evStatus').value;
+    const rows = events.filter(e=>(!q||(e.name+' '+(e.client||'')).toLowerCase().includes(q))&&(!st||e.status===st));
+    $('#evGrid').innerHTML = rows.length ? rows.map(e=>{
+      const p = progMap[e.id]||{};
+      let countdown='';
+      if(p.days_until_start!=null && p.days_until_start>0) countdown = `${T('projectStartsIn')}: <b class="num">${p.days_until_start}</b> ${T('days')}`;
+      else if(p.progress_pct!=null && p.progress_pct<100) countdown = `${T('projectDay')}: <b class="num">${(p.elapsed_days||0)}</b> / ${p.total_days||0}`;
+      else if(p.progress_pct===100) countdown = T('completedDaysAgo');
+      return `<div class="card card-pad" style="cursor:pointer" data-openevent="${e.id}">
+        <div class="row" style="margin-bottom:8px">
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.name)}</div>
+            ${e.client?`<div class="tiny muted">${esc(e.client)}</div>`:''}
+          </div>
+          ${badge(e.status)}
+        </div>
+        ${p.progress_pct!=null?`<div class="bar"><i style="width:${p.progress_pct}%"></i></div>`:''}
+        <div class="tiny muted" style="margin-top:8px">${countdown}</div>
+      </div>`;
+    }).join('') : `<p class="muted" style="grid-column:1/-1;text-align:center;padding:30px">${T('noData')}</p>`;
+    $$('[data-openevent]').forEach(c=>c.onclick=()=>goEvent(c.dataset.openevent));
+  };
+  $('#evSearch').oninput=draw; $('#evStatus').onchange=draw;
+  draw();
+};
+
+function goEvent(id, tab='overview'){
+  S.route='events'; S.eventId=id; S.eventTab=tab;
+  const hash = `#/event/${id}/${tab}`;
+  if(location.hash!==hash) history.pushState(null,'',hash);
+  render();
+}
+
+/* ===================== EVENT CREATION WIZARD ===================== */
+const WIZ = { step:1, info:{}, phases:[], staffing:{}, equipment:{}, ref:null };
+
+async function eventWizard(){
+  WIZ.step=1; WIZ.info={locationType:'saudi'}; WIZ.phases=[]; WIZ.staffing={}; WIZ.equipment={};
+  const [countries, cities, templates, roles, equipCatalog] = await Promise.all([
+    DB.select('event_countries','select=*&is_active=eq.true&order=sort_order.asc'),
+    DB.select('event_cities','select=*&is_active=eq.true&order=sort_order.asc'),
+    DB.select('event_phase_templates','select=*&is_active=eq.true&order=sort_order.asc'),
+    DB.select('event_roles','select=*&is_active=eq.true&order=sort_order.asc'),
+    DB.select('event_equipment_catalog','select=*&is_active=eq.true&order=sort_order.asc')
+  ]);
+  WIZ.ref = {countries, cities, templates, roles, equipCatalog};
+  Modal.open({wide:true, title:T('newEvent'), body:'', footer:''});
+  drawWizard();
+}
+
+function wizFooter(){
+  const last = WIZ.step===4;
+  return `<button class="btn" data-close>${T('cancel')}</button>
+    <div class="spacer"></div>
+    ${WIZ.step>1?`<button class="btn" id="wizPrev">${T('previous')}</button>`:''}
+    ${!last?`<button class="btn btn-primary" id="wizNext">${T('next')}</button>`
+           :`<button class="btn btn-primary" id="wizCreate">${T('createEvent')}</button>`}`;
+}
+
+function drawWizard(){
+  $('#modalTitle').textContent = `${T('newEvent')} — ${T('wizStep'+WIZ.step)}`;
+  $('#modalFoot').innerHTML = wizFooter();
+  const body = $('#modalBody');
+  if(WIZ.step===1) body.innerHTML = wizStep1();
+  else if(WIZ.step===2) body.innerHTML = wizStep2();
+  else if(WIZ.step===3) body.innerHTML = wizStep3();
+  else body.innerHTML = wizStep4();
+
+  bindWizStepEvents();
+  const prev=$('#wizPrev'), next=$('#wizNext'), create=$('#wizCreate');
+  if(prev) prev.onclick=()=>{ wizSaveStep(); WIZ.step--; drawWizard(); };
+  if(next) next.onclick=()=>{ if(wizValidateStep()){ wizSaveStep(); WIZ.step++; drawWizard(); } };
+  if(create) create.onclick=wizCreateEvent;
+}
+
+/* ---- Step 1: Project Information ---- */
+function wizStep1(){
+  const i=WIZ.info;
+  const saCountry = WIZ.ref.countries.find(c=>c.code==='SA');
+  const gccCountries = WIZ.ref.countries.filter(c=>c.code!=='SA');
+  return `
+    ${field('wzName',T('eventName'),'text',i.name,'required')}
+    ${field('wzClient',T('client'),'text',i.client)}
+    <div class="field"><label>${T('locationType')}</label>
+      <div class="pill-tabs" style="max-width:320px">
+        <button type="button" class="${i.locationType==='saudi'?'on':''}" data-loctype="saudi">${T('saudiArabia')}</button>
+        <button type="button" class="${i.locationType==='gcc'?'on':''}" data-loctype="gcc">${T('gccCountries')}</button>
+      </div>
+    </div>
+    <div id="wzLocFields">
+      ${i.locationType==='saudi'
+        ? selectField('wzCity',T('city'), WIZ.ref.cities.filter(c=>c.country_id===saCountry?.id).map(c=>({v:c.id,t:LANG==='ar'?c.name_ar:c.name_en})), i.cityId||'')
+        : `${selectField('wzCountry',T('country'), gccCountries.map(c=>({v:c.id,t:LANG==='ar'?c.name_ar:c.name_en})), i.countryId||'')}
+           <div id="wzGccCityWrap">${selectField('wzCity',T('city'), WIZ.ref.cities.filter(c=>c.country_id===(i.countryId||gccCountries[0]?.id)).map(c=>({v:c.id,t:LANG==='ar'?c.name_ar:c.name_en})), i.cityId||'')}</div>`}
+    </div>`;
+}
+function bindWizStepEvents(){
+  if(WIZ.step===1){
+    $$('[data-loctype]').forEach(b=>b.onclick=()=>{
+      WIZ.info.locationType=b.dataset.loctype; WIZ.info.countryId=null; WIZ.info.cityId=null;
+      $('#modalBody').innerHTML = wizStep1(); bindWizStepEvents();
+    });
+    const cSel=$('#wzCountry');
+    if(cSel) cSel.onchange=()=>{
+      const cid=cSel.value;
+      const opts = WIZ.ref.cities.filter(c=>c.country_id===cid).map(c=>({v:c.id,t:LANG==='ar'?c.name_ar:c.name_en}));
+      $('#wzGccCityWrap').innerHTML = selectField('wzCity',T('city'),opts,'');
+    };
+  }
+  if(WIZ.step===2){
+    $$('[data-addphase]').forEach(b=>b.onclick=()=>wizAddPhaseRow(b.dataset.addphase));
+    $$('.wiz-phase-del').forEach(b=>b.onclick=()=>{ WIZ.phases.splice(Number(b.dataset.idx),1); $('#modalBody').innerHTML=wizStep2(); bindWizStepEvents(); });
+    WIZ.phases.forEach(p=>{
+      const dt=$('#phDateType_'+p._k);
+      if(dt) dt.onchange=()=>{
+        p.date_type = dt.value;
+        $('#phEndWrap_'+p._k).innerHTML = p.date_type==='range' ? field('phEnd_'+p._k,T('endDate'),'date',p.end_date) : '';
+      };
+    });
+  }
+  if(WIZ.step===3){
+    $$('.wiz-add-staff').forEach(b=>b.onclick=()=>wizAddStaffRow(b.dataset.phase));
+    $$('.wiz-add-equip').forEach(b=>b.onclick=()=>wizAddEquipRow(b.dataset.phase));
+    $$('.wiz-staff-del').forEach(b=>b.onclick=()=>{ WIZ.staffing[b.dataset.phase].splice(Number(b.dataset.idx),1); $('#modalBody').innerHTML=wizStep3(); bindWizStepEvents(); });
+    $$('.wiz-equip-del').forEach(b=>b.onclick=()=>{ WIZ.equipment[b.dataset.phase].splice(Number(b.dataset.idx),1); $('#modalBody').innerHTML=wizStep3(); bindWizStepEvents(); });
+  }
+}
+function wizValidateStep(){
+  if(WIZ.step===1){
+    const name=val('wzName'); if(!name){ toast(T('requiredField'),'err'); return false; }
+    WIZ.info.name=name; WIZ.info.client=val('wzClient');
+    if(WIZ.info.locationType==='gcc') WIZ.info.countryId=val('wzCountry');
+    WIZ.info.cityId=val('wzCity');
+    return true;
+  }
+  if(WIZ.step===2){
+    if(!WIZ.phases.length){ toast(T('addPhaseFirst'),'err'); return false; }
+    for(const p of WIZ.phases){
+      if(!val('phName_'+p._k)){ toast(T('requiredField'),'err'); return false; }
+    }
+    return true;
+  }
+  return true;
+}
+function wizSaveStep(){
+  if(WIZ.step===2){
+    WIZ.phases.forEach(p=>{
+      p.name = val('phName_'+p._k);
+      p.main_phase = val('phMain_'+p._k);
+      p.date_type = val('phDateType_'+p._k);
+      p.start_date = val('phStart_'+p._k);
+      p.end_date = p.date_type==='single' ? p.start_date : val('phEnd_'+p._k);
+    });
+  }
+}
+
+/* ---- Step 2: Timeline ---- */
+function wizAddPhaseRow(main='pre_event'){
+  WIZ.phases.push({_k:uid(), main_phase:main, template_id:'', name:'', date_type:'range', start_date:'', end_date:''});
+  $('#modalBody').innerHTML = wizStep2(); bindWizStepEvents();
+}
+function wizStep2(){
+  const groups = [['pre_event',T('mainPhasePre')],['live_event',T('mainPhaseLive')],['post_event',T('mainPhasePost')]];
+  return `
+    <div class="row row-wrap" style="margin-bottom:14px">
+      ${groups.map(([mp,label])=>`<button type="button" class="btn btn-sm" data-addphase="${mp}" style="border-color:${MAIN_PHASE_COLOR[mp]};color:${MAIN_PHASE_COLOR[mp]}">+ ${label}</button>`).join('')}
+    </div>
+    <div id="wzAddPhase" class="hide"></div>
+    ${WIZ.phases.length ? WIZ.phases.map((p,idx)=>`
+      <div class="card card-pad" style="margin-bottom:10px;border-inline-start:3px solid ${MAIN_PHASE_COLOR[p.main_phase]}">
+        <div class="row" style="margin-bottom:10px">
+          <span class="badge" style="background:${MAIN_PHASE_COLOR[p.main_phase]}22;color:${MAIN_PHASE_COLOR[p.main_phase]}">${MAIN_PHASE_LABEL(p.main_phase)}</span>
+          <div class="spacer"></div>
+          <button class="btn btn-ghost btn-sm wiz-phase-del" data-idx="${idx}">✕</button>
+        </div>
+        <div class="grid-3">
+          ${field('phName_'+p._k,T('phaseName'),'text',p.name,'required')}
+          ${selectField('phDateType_'+p._k,T('dateType'),EOPT.dateType(),p.date_type)}
+          ${field('phStart_'+p._k,T('startDate'),'date',p.start_date)}
+        </div>
+        <div id="phEndWrap_${p._k}">${p.date_type==='range'?field('phEnd_'+p._k,T('endDate'),'date',p.end_date):''}</div>
+        <input type="hidden" id="phMain_${p._k}" value="${p.main_phase}">
+      </div>`).join('')
+    : `<p class="tiny muted" style="text-align:center;padding:16px">${T('noPhases')}</p>`}`;
+}
+
+/* ---- Step 3: Manpower & Equipment per phase ---- */
+function phaseDays(p){
+  if(!p.start_date) return 1;
+  const end = p.date_type==='single' ? p.start_date : (p.end_date||p.start_date);
+  return Math.max(1, daysBetween(p.start_date, end)+1);
+}
+function wizAddStaffRow(phaseKey){
+  WIZ.staffing[phaseKey] = WIZ.staffing[phaseKey]||[];
+  const phase = WIZ.phases.find(p=>p._k===phaseKey);
+  WIZ.staffing[phaseKey].push({role_id:WIZ.ref.roles[0]?.id||'', staff_per_shift:1, number_of_shifts:1, number_of_days:phaseDays(phase), daily_rate:WIZ.ref.roles[0]?.default_daily_rate||0, daily_cost:WIZ.ref.roles[0]?.default_daily_cost||0});
+  $('#modalBody').innerHTML = wizStep3(); bindWizStepEvents();
+}
+function wizAddEquipRow(phaseKey){
+  WIZ.equipment[phaseKey] = WIZ.equipment[phaseKey]||[];
+  const cat = WIZ.ref.equipCatalog[0];
+  WIZ.equipment[phaseKey].push({catalog_id:cat?.id||'', name:cat?(LANG==='ar'?cat.name_ar:cat.name_en):'', quantity:1, pricing_type:cat?.pricing_type||'per_day', days:1, unit_cost:cat?.default_cost||0, unit_price:cat?.default_price||0});
+  $('#modalBody').innerHTML = wizStep3(); bindWizStepEvents();
+}
+function wizStep3(){
+  if(!WIZ.phases.length) return `<p class="tiny muted" style="text-align:center;padding:16px">${T('addPhaseFirst')}</p>`;
+  return WIZ.phases.map(p=>{
+    const staff = WIZ.staffing[p._k]||[];
+    const equip = WIZ.equipment[p._k]||[];
+    return `<div class="card card-pad" style="margin-bottom:14px;border-inline-start:3px solid ${MAIN_PHASE_COLOR[p.main_phase]}">
+      <div class="row" style="margin-bottom:10px">
+        <span style="font-weight:600">${esc(p.name)}</span>
+        <span class="badge" style="background:${MAIN_PHASE_COLOR[p.main_phase]}22;color:${MAIN_PHASE_COLOR[p.main_phase]}">${MAIN_PHASE_LABEL(p.main_phase)}</span>
+        <span class="tiny muted">${fmtDate(p.start_date)} — ${fmtDate(p.date_type==='single'?p.start_date:p.end_date)} · ${phaseDays(p)} ${T('days')}</span>
+      </div>
+      <div class="eyebrow" style="margin-bottom:6px">${T('eventManpower')}</div>
+      ${staff.map((s,idx)=>`<div class="grid-3" style="align-items:end;margin-bottom:6px">
+        <div class="field" style="margin:0"><label>${T('role')}</label><select class="inp" id="stRole_${p._k}_${idx}">
+          ${WIZ.ref.roles.map(r=>`<option value="${r.id}" ${r.id===s.role_id?'selected':''}>${esc(LANG==='ar'?r.name_ar:r.name_en)}</option>`).join('')}</select></div>
+        <div class="field" style="margin:0"><label>${T('staffPerShift')}</label><input class="inp" type="number" min="1" id="stCount_${p._k}_${idx}" value="${s.staff_per_shift}"></div>
+        <div class="field" style="margin:0"><label>${T('numberOfShifts')}</label><select class="inp" id="stShifts_${p._k}_${idx}">${EOPT.shifts().map(o=>`<option value="${o.v}" ${String(s.number_of_shifts)===o.v?'selected':''}>${o.t}</option>`).join('')}</select></div>
+        <div class="field" style="margin:0"><label>${T('numberOfDays')}</label><input class="inp" type="number" min="1" id="stDays_${p._k}_${idx}" value="${s.number_of_days}"></div>
+        <div class="field" style="margin:0"><label>${T('dailyRate')}</label><input class="inp" type="number" min="0" step="0.01" id="stRate_${p._k}_${idx}" value="${s.daily_rate}"></div>
+        <button class="btn btn-ghost btn-sm wiz-staff-del" data-phase="${p._k}" data-idx="${idx}" style="align-self:center">✕</button>
+      </div>`).join('')}
+      <button class="btn btn-sm wiz-add-staff" data-phase="${p._k}">+ ${T('addManpower')}</button>
+
+      <div class="divider"></div>
+      <div class="eyebrow" style="margin-bottom:6px">${T('eventEquipment')}</div>
+      ${equip.map((e,idx)=>`<div class="grid-3" style="align-items:end;margin-bottom:6px">
+        <div class="field" style="margin:0"><label>${T('equipmentName')}</label><select class="inp" id="eqCat_${p._k}_${idx}">
+          ${WIZ.ref.equipCatalog.map(c=>`<option value="${c.id}" ${c.id===e.catalog_id?'selected':''}>${esc(LANG==='ar'?c.name_ar:c.name_en)}</option>`).join('')}</select></div>
+        <div class="field" style="margin:0"><label>${T('quantity')}</label><input class="inp" type="number" min="1" step="0.01" id="eqQty_${p._k}_${idx}" value="${e.quantity}"></div>
+        <div class="field" style="margin:0"><label>${T('pricingType')}</label><select class="inp" id="eqPrice_${p._k}_${idx}">${EOPT.pricing().map(o=>`<option value="${o.v}" ${o.v===e.pricing_type?'selected':''}>${o.t}</option>`).join('')}</select></div>
+        <button class="btn btn-ghost btn-sm wiz-equip-del" data-phase="${p._k}" data-idx="${idx}" style="align-self:center">✕</button>
+      </div>`).join('')}
+      <button class="btn btn-sm wiz-add-equip" data-phase="${p._k}">+ ${T('addEquipment')}</button>
+    </div>`;
+  }).join('');
+}
+function wizCollectStep3(){
+  WIZ.phases.forEach(p=>{
+    (WIZ.staffing[p._k]||[]).forEach((s,idx)=>{
+      s.role_id = val(`stRole_${p._k}_${idx}`);
+      s.staff_per_shift = Number(val(`stCount_${p._k}_${idx}`)||1);
+      s.number_of_shifts = Number(val(`stShifts_${p._k}_${idx}`)||1);
+      s.number_of_days = Number(val(`stDays_${p._k}_${idx}`)||1);
+      s.daily_rate = Number(val(`stRate_${p._k}_${idx}`)||0);
+      const role = WIZ.ref.roles.find(r=>r.id===s.role_id);
+      s.daily_cost = role?.default_daily_cost||0;
+    });
+    (WIZ.equipment[p._k]||[]).forEach((e,idx)=>{
+      e.catalog_id = val(`eqCat_${p._k}_${idx}`);
+      e.quantity = Number(val(`eqQty_${p._k}_${idx}`)||1);
+      e.pricing_type = val(`eqPrice_${p._k}_${idx}`);
+      const cat = WIZ.ref.equipCatalog.find(c=>c.id===e.catalog_id);
+      e.name = cat?(LANG==='ar'?cat.name_ar:cat.name_en):'';
+      e.unit_cost = cat?.default_cost||0; e.unit_price = cat?.default_price||0;
+      e.days = e.pricing_type==='per_day' ? phaseDays(p) : null;
+    });
+  });
+}
+
+/* ---- Step 4: Review ---- */
+function wizStep4(){
+  wizCollectStep3();
+  let totalStaffUnits=0, totalStaffRevenue=0, totalEquipRevenue=0;
+  const allDates = WIZ.phases.flatMap(p=>[p.start_date, p.date_type==='single'?p.start_date:p.end_date]).filter(Boolean).sort();
+  const start = allDates[0], end = allDates[allDates.length-1];
+  const totalDur = start&&end ? daysBetween(start,end)+1 : 0;
+
+  const phaseBlocks = WIZ.phases.map(p=>{
+    const staff = WIZ.staffing[p._k]||[], equip = WIZ.equipment[p._k]||[];
+    const staffRows = staff.map(s=>{
+      const units = s.staff_per_shift*s.number_of_shifts*s.number_of_days;
+      const rev = units*s.daily_rate;
+      totalStaffUnits+=units; totalStaffRevenue+=rev;
+      const role = WIZ.ref.roles.find(r=>r.id===s.role_id);
+      return `<div class="li-sub">${esc(role?(LANG==='ar'?role.name_ar:role.name_en):'')} — ${s.staff_per_shift} × ${s.number_of_shifts} × ${s.number_of_days} ${T('days')} = <b class="num">${units}</b> · ${fmtMoney(rev)}</div>`;
+    }).join('');
+    const equipRows = equip.map(e=>{
+      const rev = e.pricing_type==='per_day' ? e.quantity*(e.days||1)*e.unit_price : e.quantity*e.unit_price;
+      totalEquipRevenue+=rev;
+      return `<div class="li-sub">${esc(e.name)} × ${e.quantity}${e.pricing_type==='per_day'?' × '+(e.days||1)+' '+T('days'):''} — ${fmtMoney(rev)}</div>`;
+    }).join('');
+    return `<div style="margin-bottom:12px">
+      <div class="row"><span class="badge" style="background:${MAIN_PHASE_COLOR[p.main_phase]}22;color:${MAIN_PHASE_COLOR[p.main_phase]}">${MAIN_PHASE_LABEL(p.main_phase)}</span>
+        <b>${esc(p.name)}</b><span class="tiny muted">${fmtDate(p.start_date)} — ${fmtDate(p.date_type==='single'?p.start_date:p.end_date)}</span></div>
+      ${staffRows}${equipRows}
+    </div>`;
+  }).join('');
+
+  return `<div class="stack">
+    <div class="card card-pad">
+      <div class="eyebrow">${T('eventName')}</div><div style="font-weight:600;font-size:16px">${esc(WIZ.info.name)}</div>
+      ${WIZ.info.client?`<div class="tiny muted">${esc(WIZ.info.client)}</div>`:''}
+    </div>
+    <div class="card card-pad">${phaseBlocks}</div>
+    <div class="kpis">
+      <div class="kpi" style="--k:var(--teal-600)"><div class="kpi-label">${T('totalDuration')}</div><div class="kpi-value">${totalDur}</div></div>
+      <div class="kpi" style="--k:var(--violet-500)"><div class="kpi-label">${T('manpowerTotals')}</div><div class="kpi-value">${totalStaffUnits}</div></div>
+      <div class="kpi" style="--k:var(--green-600)"><div class="kpi-label">${T('eventFinancial')}</div><div class="kpi-value" style="font-size:18px">${fmtMoney(totalStaffRevenue+totalEquipRevenue)}</div></div>
+    </div>
+  </div>`;
+}
+
+async function wizCreateEvent(){
+  const btn=$('#wizCreate'); btn.disabled=true;
+  try{
+    const ev = await DB.insert('events',{
+      owner_id:S.profile.id, name:WIZ.info.name, client:WIZ.info.client||null,
+      location_type:WIZ.info.locationType, country_id:WIZ.info.countryId||null, city_id:WIZ.info.cityId||null,
+      status:'draft'
+    });
+    for(const p of WIZ.phases){
+      const ph = await DB.insert('event_phases',{
+        owner_id:S.profile.id, event_id:ev.id, main_phase:p.main_phase, name:p.name,
+        date_type:p.date_type, start_date:p.start_date, end_date: p.date_type==='single'?p.start_date:p.end_date
+      });
+      for(const s of (WIZ.staffing[p._k]||[])){
+        await DB.insert('event_phase_staffing',{owner_id:S.profile.id, event_id:ev.id, phase_id:ph.id,
+          role_id:s.role_id, staff_per_shift:s.staff_per_shift, number_of_shifts:s.number_of_shifts,
+          number_of_days:s.number_of_days, daily_rate:s.daily_rate, daily_cost:s.daily_cost});
+      }
+      for(const e of (WIZ.equipment[p._k]||[])){
+        await DB.insert('event_phase_equipment',{owner_id:S.profile.id, event_id:ev.id, phase_id:ph.id,
+          catalog_id:e.catalog_id, name:e.name, quantity:e.quantity, pricing_type:e.pricing_type,
+          days:e.days, unit_cost:e.unit_cost, unit_price:e.unit_price});
+      }
+    }
+    Modal.close(); toast(T('savedOk'),'ok'); goEvent(ev.id);
+  }catch(e){ toast(e.message,'err'); btn.disabled=false; }
+}
+</script>
+<script>
+/* ===================== EVENT WORKSPACE ===================== */
+const E_TABS = ['overview','timeline','manpower','equipment','roster','timesheet'];
+
+VIEWS.eventDetail = async (v)=>{
+  const id=S.eventId;
+  const [ev] = await DB.select('events',`select=*&id=eq.${id}`);
+  if(!ev){ v.innerHTML=emptyState(T('noData'),'',T('backToProjects'),()=>go('events')); return; }
+  const [prog] = await DB.select('v_event_progress',`select=*&event_id=eq.${id}`);
+  const p = prog || {};
+  $('#pageTitle').textContent = ev.name;
+  topAction(T('edit'), ()=>toast(T('noData'),'err'));
+
+  v.innerHTML = `<div class="stack">
+    <div class="row row-wrap">
+      <button class="btn btn-sm btn-ghost" onclick="go('events')">← ${T('backToProjects')}</button>
+      <div class="spacer"></div>
+      ${badge(ev.status)}
+      <button class="btn btn-sm btn-danger" id="evDelBtn">${T('del')}</button>
+    </div>
+    <div class="tabs" id="evTabs">${E_TABS.map(t=>`<div class="tab ${S.eventTab===t?'on':''}" data-tab="${t}">${T('event'+t.charAt(0).toUpperCase()+t.slice(1))}</div>`).join('')}</div>
+    <div id="evTabBody"><div class="loading"><div class="spin"></div></div></div>
+  </div>`;
+
+  $$('#evTabs .tab').forEach(t=>t.onclick=()=>goEvent(id,t.dataset.tab));
+  $('#evDelBtn').onclick=()=>Modal.confirm(T('confirmDelete'),T('confirmDeleteBody'),async()=>{
+    await DB.remove('events',id); toast(T('deletedOk'),'ok'); go('events');
+  });
+
+  const body=$('#evTabBody');
+  const R = {overview:evOverview, timeline:evTimeline, manpower:evManpower, equipment:evEquipment, roster:evRoster, timesheet:evTimesheet};
+  await (R[S.eventTab]||evOverview)(body, ev, p);
+};
+
+/* ---------- OVERVIEW ---------- */
+async function evOverview(el, ev, p){
+  const [phases, fin] = await Promise.all([
+    DB.select('event_phases',`select=*&event_id=eq.${ev.id}&order=start_date.asc`),
+    DB.select('v_event_financials',`select=*&event_id=eq.${ev.id}`)
+  ]);
+  const f = fin[0] || {};
+  let countdownLine = '—';
+  if(p.days_until_start!=null && p.days_until_start>0) countdownLine = `${T('projectStartsIn')}: <b class="num">${p.days_until_start}</b> ${T('days')}`;
+  else if(p.progress_pct===100) countdownLine = T('completedDaysAgo');
+  else if(p.progress_pct!=null) countdownLine = `${T('projectDay')} <b class="num">${p.elapsed_days}</b> / ${p.total_days}`;
+
+  const phaseCards = await Promise.all(phases.map(async ph=>{
+    const [pf] = await DB.select('v_event_phase_financials',`select=*&phase_id=eq.${ph.id}`);
+    const cd = countdown(ph.start_date);
+    return `<div class="card card-pad" style="border-inline-start:3px solid ${MAIN_PHASE_COLOR[ph.main_phase]}">
+      <div class="row"><span class="badge" style="background:${MAIN_PHASE_COLOR[ph.main_phase]}22;color:${MAIN_PHASE_COLOR[ph.main_phase]}">${MAIN_PHASE_LABEL(ph.main_phase)}</span>
+        <b style="flex:1">${esc(ph.name)}</b>${badge(ph.status)}</div>
+      <div class="tiny muted" style="margin-top:6px">${fmtDate(ph.start_date)} — ${fmtDate(ph.end_date)}</div>
+      ${pf?`<div class="tiny muted" style="margin-top:4px">${T('peakStaffPerShift')}: <b class="num">${pf.peak_staff_per_shift||0}</b> · ${T('totalPlannedStaffing')}: <b class="num">${pf.staffing_units||0}</b></div>`:''}
+      ${cd?`<div class="tiny" style="margin-top:6px;color:${cd.past?'var(--text-3)':'var(--teal-600)'}">${cd.label}</div>`:''}
+    </div>`;
+  }));
+
+  el.innerHTML = `<div class="stack">
+    <div class="card card-pad">
+      <div class="row row-wrap" style="gap:20px">
+        <div><div class="eyebrow">${T('client')}</div><div>${esc(ev.client||'—')}</div></div>
+        <div><div class="eyebrow">${T('locationType')}</div><div>${ev.location_type==='saudi'?T('saudiArabia'):T('gccCountries')}</div></div>
+        <div><div class="eyebrow">${T('projectDay')}</div><div>${countdownLine}</div></div>
+      </div>
+      ${p.progress_pct!=null?`<div class="bar" style="margin-top:12px"><i style="width:${p.progress_pct}%"></i></div>`:''}
+    </div>
+    <div class="kpis">
+      <div class="kpi" style="--k:var(--teal-600)"><div class="kpi-label">${T('totalDays')}</div><div class="kpi-value">${p.total_days??'—'}</div></div>
+      <div class="kpi" style="--k:var(--violet-500)"><div class="kpi-label">${T('totalPlannedStaffing')}</div><div class="kpi-value">${f.total_staffing_units||0}</div></div>
+      <div class="kpi" style="--k:var(--amber-500)"><div class="kpi-label">${T('peakStaffPerShift')}</div><div class="kpi-value">${f.peak_staff_per_shift||0}</div></div>
+      <div class="kpi" style="--k:var(--green-600)"><div class="kpi-label">${T('eventFinancial')}</div><div class="kpi-value" style="font-size:17px">${fmtMoney(f.total_revenue||0)}</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px">${phaseCards.join('')}</div>
+  </div>`;
+}
+
+/* ---------- TIMELINE (visual, phase-colored) ---------- */
+async function evTimeline(el, ev){
+  const phases = await DB.select('event_phases',`select=*&event_id=eq.${ev.id}&order=start_date.asc`);
+  if(!phases.length){ el.innerHTML=emptyState(T('noPhases'),''); return; }
+  const dates = phases.flatMap(p=>[p.start_date,p.end_date]);
+  let min=dates[0], max=dates[dates.length-1];
+  min=addDays(min,-2); max=addDays(max,2);
+  const span=Math.max(1,daysBetween(min,max));
+  const pos=d=>Math.max(0,Math.min(100,(daysBetween(min,d)/span)*100));
+  const months=[]; let cur=min.slice(0,7);
+  while(cur<=max.slice(0,7)){ months.push(cur); const [y,m]=cur.split('-').map(Number); cur = m===12?`${y+1}-01`:`${y}-${String(m+1).padStart(2,'0')}`; }
+  const monLabel = ym => new Date(ym+'-01T00:00:00').toLocaleDateString(LANG==='ar'?'ar-SA-u-ca-gregory-nu-latn':'en-GB',{month:'short',year:'2-digit'});
+  const todayPos = todayISO()>=min && todayISO()<=max ? pos(todayISO()) : null;
+
+  el.innerHTML = `<div class="stack">
+    <div class="row row-wrap tiny muted" style="gap:14px">
+      <span><i style="display:inline-block;width:11px;height:8px;background:${MAIN_PHASE_COLOR.pre_event};border-radius:2px"></i> ${T('mainPhasePre')}</span>
+      <span><i style="display:inline-block;width:11px;height:8px;background:${MAIN_PHASE_COLOR.live_event};border-radius:2px"></i> ${T('mainPhaseLive')}</span>
+      <span><i style="display:inline-block;width:11px;height:8px;background:${MAIN_PHASE_COLOR.post_event};border-radius:2px"></i> ${T('mainPhasePost')}</span>
+      <span><i style="display:inline-block;width:2px;height:11px;background:var(--rose-600)"></i> ${T('today')}</span>
+    </div>
+    <div class="gantt"><div class="gantt-inner">
+      <div class="g-head"><div class="g-label-col">${T('phaseName')}</div>
+        <div class="g-scale">${months.map(m=>`<div class="g-tick">${monLabel(m)}</div>`).join('')}</div></div>
+      ${phases.map(ph=>{
+        const l=pos(ph.start_date), w=Math.max(1.5,pos(ph.end_date)-l);
+        return `<div class="g-row">
+          <div class="g-label"><span>${esc(ph.name)}</span></div>
+          <div class="g-lane">
+            <div class="g-grid">${months.map(()=>'<i></i>').join('')}</div>
+            ${todayPos!=null?`<div class="g-today" style="inset-inline-start:${todayPos}%"></div>`:''}
+            <div class="g-bar" style="inset-inline-start:${l}%;width:${w}%;background:${MAIN_PHASE_COLOR[ph.main_phase]}"><span>${esc(ph.name)} · ${fmtDate(ph.start_date)}–${fmtDate(ph.end_date)}</span></div>
+          </div></div>`;
+      }).join('')}
+    </div></div>
+  </div>`;
+}
+
+/* ---------- MANPOWER (read/edit staffing across phases) ---------- */
+async function evManpower(el, ev){
+  const [phases, staffing, roles] = await Promise.all([
+    DB.select('event_phases',`select=*&event_id=eq.${ev.id}&order=start_date.asc`),
+    DB.select('event_phase_staffing',`select=*&event_id=eq.${ev.id}`),
+    DB.select('event_roles','select=*&is_active=eq.true&order=sort_order.asc')
+  ]);
+  if(!phases.length){ el.innerHTML=emptyState(T('noPhases'),''); return; }
+  const roleMap = Object.fromEntries(roles.map(r=>[r.id,r]));
+
+  el.innerHTML = `<div class="stack">${phases.map(ph=>{
+    const rows = staffing.filter(s=>s.phase_id===ph.id);
+    const units = rows.reduce((a,s)=>a+s.staff_per_shift*s.number_of_shifts*s.number_of_days,0);
+    return `<div class="card">
+      <div class="card-head"><span class="badge" style="background:${MAIN_PHASE_COLOR[ph.main_phase]}22;color:${MAIN_PHASE_COLOR[ph.main_phase]}">${MAIN_PHASE_LABEL(ph.main_phase)}</span>
+        <h3 style="flex:1">${esc(ph.name)}</h3>
+        <button class="btn btn-sm" data-addstaff="${ph.id}">+ ${T('addManpower')}</button></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>${T('role')}</th><th>${T('staffPerShift')}</th><th>${T('numberOfShifts')}</th><th>${T('numberOfDays')}</th><th>${T('calculatedUnits')}</th><th>${T('dailyRate')}</th><th></th></tr></thead>
+        <tbody>${rows.length?rows.map(s=>{
+          const u=s.staff_per_shift*s.number_of_shifts*s.number_of_days;
+          const r=roleMap[s.role_id];
+          return `<tr><td class="cell-strong">${esc(r?(LANG==='ar'?r.name_ar:r.name_en):'—')}</td>
+            <td class="num tiny">${s.staff_per_shift}</td><td class="num tiny">${s.number_of_shifts}</td><td class="num tiny">${s.number_of_days}</td>
+            <td class="num cell-strong">${u}</td><td class="num tiny">${fmtMoney(s.daily_rate)}</td>
+            <td><button class="btn btn-ghost btn-sm" data-delstaff="${s.id}">✕</button></td></tr>`;
+        }).join(''):`<tr><td colspan="7" class="muted tiny" style="text-align:center;padding:16px">${T('noData')}</td></tr>`}
+        </tbody></table></div>
+      <div class="card-pad tiny muted" style="padding-top:0">${T('calculatedUnits')}: <b class="num">${units}</b></div>
+    </div>`;
+  }).join('')}</div>`;
+
+  $$('[data-addstaff]').forEach(b=>b.onclick=()=>evAddStaffModal(ev, b.dataset.addstaff, roles));
+  $$('[data-delstaff]').forEach(b=>b.onclick=()=>Modal.confirm(T('confirmDelete'),T('confirmDeleteBody'),async()=>{
+    await DB.remove('event_phase_staffing',b.dataset.delstaff); toast(T('deletedOk'),'ok'); render();
+  }));
+}
+function evAddStaffModal(ev, phaseId, roles){
+  Modal.open({title:T('addManpower'),
+    body:`${selectField('esRole',T('role'),roles.map(r=>({v:r.id,t:LANG==='ar'?r.name_ar:r.name_en})))}
+      <div class="grid-3">
+        ${field('esCount',T('staffPerShift'),'number',1,'min="1"')}
+        ${selectField('esShifts',T('numberOfShifts'),EOPT.shifts(),'1')}
+        ${field('esDays',T('numberOfDays'),'number',1,'min="1"')}
+      </div>
+      ${field('esRate',T('dailyRate'),'number',roles[0]?.default_daily_rate||0,'min="0" step="0.01"')}`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="esSave">${T('add')}</button>`});
+  $('#esRole').onchange=()=>{ const r=roles.find(x=>x.id===val('esRole')); if(r) $('#esRate').value=r.default_daily_rate; };
+  $('#esSave').onclick=async()=>{
+    const role=roles.find(r=>r.id===val('esRole'));
+    try{
+      await DB.insert('event_phase_staffing',{owner_id:S.profile.id, event_id:ev.id, phase_id:phaseId,
+        role_id:val('esRole'), staff_per_shift:Number(val('esCount')), number_of_shifts:Number(val('esShifts')),
+        number_of_days:Number(val('esDays')), daily_rate:Number(val('esRate')), daily_cost:role?.default_daily_cost||0});
+      Modal.close(); toast(T('savedOk'),'ok'); render();
+    }catch(e){ toast(e.message,'err'); }
+  };
+}
+
+/* ---------- EQUIPMENT ---------- */
+async function evEquipment(el, ev){
+  const [phases, equipment, catalog] = await Promise.all([
+    DB.select('event_phases',`select=*&event_id=eq.${ev.id}&order=start_date.asc`),
+    DB.select('event_phase_equipment',`select=*&event_id=eq.${ev.id}`),
+    DB.select('event_equipment_catalog','select=*&is_active=eq.true&order=sort_order.asc')
+  ]);
+  if(!phases.length){ el.innerHTML=emptyState(T('noPhases'),''); return; }
+
+  el.innerHTML = `<div class="stack">${phases.map(ph=>{
+    const rows = equipment.filter(e=>e.phase_id===ph.id);
+    return `<div class="card">
+      <div class="card-head"><span class="badge" style="background:${MAIN_PHASE_COLOR[ph.main_phase]}22;color:${MAIN_PHASE_COLOR[ph.main_phase]}">${MAIN_PHASE_LABEL(ph.main_phase)}</span>
+        <h3 style="flex:1">${esc(ph.name)}</h3>
+        <button class="btn btn-sm" data-addequip="${ph.id}">+ ${T('addEquipment')}</button></div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>${T('equipmentName')}</th><th>${T('quantity')}</th><th>${T('pricingType')}</th><th>${T('unitPrice')}</th><th></th></tr></thead>
+        <tbody>${rows.length?rows.map(e=>`<tr><td class="cell-strong">${esc(e.name)}</td><td class="num tiny">${e.quantity}</td>
+          <td class="tiny">${T(e.pricing_type)}</td><td class="num tiny">${fmtMoney(e.unit_price)}</td>
+          <td><button class="btn btn-ghost btn-sm" data-delequip="${e.id}">✕</button></td></tr>`).join(''):
+          `<tr><td colspan="5" class="muted tiny" style="text-align:center;padding:16px">${T('noData')}</td></tr>`}
+        </tbody></table></div>
+    </div>`;
+  }).join('')}</div>`;
+
+  $$('[data-addequip]').forEach(b=>b.onclick=()=>evAddEquipModal(ev, b.dataset.addequip, catalog));
+  $$('[data-delequip]').forEach(b=>b.onclick=()=>Modal.confirm(T('confirmDelete'),T('confirmDeleteBody'),async()=>{
+    await DB.remove('event_phase_equipment',b.dataset.delequip); toast(T('deletedOk'),'ok'); render();
+  }));
+}
+function evAddEquipModal(ev, phaseId, catalog){
+  Modal.open({title:T('addEquipment'),
+    body:`${selectField('eeCat',T('equipmentName'),catalog.map(c=>({v:c.id,t:LANG==='ar'?c.name_ar:c.name_en})))}
+      <div class="grid-2">
+        ${field('eeQty',T('quantity'),'number',1,'min="1" step="0.01"')}
+        ${selectField('eePrice',T('pricingType'),EOPT.pricing(),catalog[0]?.pricing_type||'per_day')}
+      </div>`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="eeSave">${T('add')}</button>`});
+  $('#eeSave').onclick=async()=>{
+    const cat=catalog.find(c=>c.id===val('eeCat'));
+    try{
+      await DB.insert('event_phase_equipment',{owner_id:S.profile.id, event_id:ev.id, phase_id:phaseId,
+        catalog_id:cat?.id, name:cat?(LANG==='ar'?cat.name_ar:cat.name_en):'', quantity:Number(val('eeQty')),
+        pricing_type:val('eePrice'), unit_cost:cat?.default_cost||0, unit_price:cat?.default_price||0});
+      Modal.close(); toast(T('savedOk'),'ok'); render();
+    }catch(e){ toast(e.message,'err'); }
+  };
+}
+
+/* ---------- ROSTER ---------- */
+async function evRoster(el, ev){
+  const [phases, roster, roles] = await Promise.all([
+    DB.select('event_phases',`select=*&event_id=eq.${ev.id}&order=start_date.asc`),
+    DB.select('event_roster',`select=*&event_id=eq.${ev.id}`),
+    DB.select('event_roles','select=*&is_active=eq.true&order=sort_order.asc')
+  ]);
+  if(!phases.length){ el.innerHTML=emptyState(T('noPhases'),''); return; }
+  const roleMap = Object.fromEntries(roles.map(r=>[r.id,r]));
+
+  el.innerHTML = `<div class="stack">${phases.map(ph=>{
+    const rows = roster.filter(r=>r.phase_id===ph.id);
+    return `<div class="card">
+      <div class="card-head"><span class="badge" style="background:${MAIN_PHASE_COLOR[ph.main_phase]}22;color:${MAIN_PHASE_COLOR[ph.main_phase]}">${MAIN_PHASE_LABEL(ph.main_phase)}</span>
+        <h3 style="flex:1">${esc(ph.name)}</h3>
+        <button class="btn btn-sm" data-addworker="${ph.id}">+ ${T('addWorker')}</button></div>
+      ${rows.length?`<div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>${T('workerName')}</th><th>${T('role')}</th><th>${T('numberOfShifts')}</th><th>${T('startDate')}</th><th>${T('endDate')}</th><th>${T('dailyRate')}</th><th></th></tr></thead>
+        <tbody>${rows.map(r=>`<tr><td class="cell-strong">${esc(r.worker_name)}</td><td class="tiny">${esc(roleMap[r.role_id]?(LANG==='ar'?roleMap[r.role_id].name_ar:roleMap[r.role_id].name_en):'—')}</td>
+          <td class="num tiny">${r.shift_number}</td><td class="tiny">${fmtDate(r.start_date)}</td><td class="tiny">${fmtDate(r.end_date)}</td>
+          <td class="num tiny">${fmtMoney(r.daily_rate)}</td><td><button class="btn btn-ghost btn-sm" data-delroster="${r.id}">✕</button></td></tr>`).join('')}
+        </tbody></table></div>`:`<div class="card-pad"><p class="tiny muted" style="text-align:center">${T('noRoster')}</p></div>`}
+    </div>`;
+  }).join('')}</div>`;
+
+  $$('[data-addworker]').forEach(b=>b.onclick=()=>evAddWorkerModal(ev, phases.find(p=>p.id===b.dataset.addworker), roles));
+  $$('[data-delroster]').forEach(b=>b.onclick=()=>Modal.confirm(T('confirmDelete'),T('confirmDeleteBody'),async()=>{
+    await DB.remove('event_roster',b.dataset.delroster); toast(T('deletedOk'),'ok'); render();
+  }));
+}
+function evAddWorkerModal(ev, phase, roles){
+  Modal.open({title:T('addWorker'),
+    body:`${field('rwName',T('workerName'),'text','','required')}
+      <div class="grid-2">
+        ${selectField('rwRole',T('role'),roles.map(r=>({v:r.id,t:LANG==='ar'?r.name_ar:r.name_en})))}
+        ${selectField('rwShift',T('numberOfShifts'),EOPT.shifts(),'1')}
+      </div>
+      <div class="grid-2">
+        ${field('rwStart',T('startDate'),'date',phase.start_date)}
+        ${field('rwEnd',T('endDate'),'date',phase.end_date)}
+      </div>
+      ${field('rwRate',T('dailyRate'),'number',roles[0]?.default_daily_rate||0,'min="0" step="0.01"')}`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="rwSave">${T('assignToRoster')}</button>`});
+  $('#rwRole').onchange=()=>{ const r=roles.find(x=>x.id===val('rwRole')); if(r) $('#rwRate').value=r.default_daily_rate; };
+  $('#rwSave').onclick=async()=>{
+    const name=val('rwName'); if(!name) return toast(T('requiredField'),'err');
+    try{
+      await DB.insert('event_roster',{owner_id:S.profile.id, event_id:ev.id, phase_id:phase.id,
+        worker_name:name, role_id:val('rwRole'), shift_number:Number(val('rwShift')),
+        start_date:val('rwStart'), end_date:val('rwEnd'), daily_rate:Number(val('rwRate'))});
+      Modal.close(); toast(T('savedOk'),'ok'); render();
+    }catch(e){ toast(e.message,'err'); }
+  };
+}
+
+/* ---------- TIMESHEET — professional daily attendance grid + approval workflow ---------- */
+async function evTimesheet(el, ev){
+  const phases = await DB.select('event_phases',`select=*&event_id=eq.${ev.id}&order=start_date.asc`);
+  if(!phases.length){ el.innerHTML=emptyState(T('noPhases'),''); return; }
+  const activePhaseId = S.cache.tsPhase && phases.some(p=>p.id===S.cache.tsPhase) ? S.cache.tsPhase : phases[0].id;
+  S.cache.tsPhase = activePhaseId;
+  const phase = phases.find(p=>p.id===activePhaseId);
+
+  const [roster, attendance, timesheets, roles] = await Promise.all([
+    DB.select('event_roster',`select=*&phase_id=eq.${activePhaseId}&order=created_at.asc`),
+    DB.select('event_attendance',`select=*&phase_id=eq.${activePhaseId}`),
+    DB.select('event_timesheets',`select=*&event_id=eq.${ev.id}&phase_id=eq.${activePhaseId}&order=created_at.desc`),
+    DB.select('event_roles','select=*')
+  ]);
+  const roleMap = Object.fromEntries(roles.map(r=>[r.id,r]));
+  const latestTs = timesheets[0];
+  const locked = latestTs && ['approved','payroll_ready','locked'].includes(latestTs.status);
+
+  // Build the date range for this phase.
+  const days=[]; let d=phase.start_date;
+  while(d<=phase.end_date){ days.push(d); d=addDays(d,1); }
+  const attMap = {}; // roster_id -> date -> record
+  attendance.forEach(a=>{ (attMap[a.roster_id] ||= {})[a.work_date] = a; });
+
+  const totalPayable = roster.reduce((sum,r)=>{
+    const rec = attMap[r.id]||{};
+    const presentDays = Object.values(rec).filter(a=>a.status==='present').length;
+    return sum + presentDays*r.daily_rate;
+  },0);
+
+  el.innerHTML = `<div class="stack">
+    <div class="row row-wrap">
+      <div class="pill-tabs" id="tsPhaseTabs">${phases.map(p=>`<button class="${p.id===activePhaseId?'on':''}" data-tsphase="${p.id}">${esc(p.name)}</button>`).join('')}</div>
+      <div class="spacer"></div>
+      ${latestTs?`<span class="badge ${latestTs.status==='approved'||latestTs.status==='locked'||latestTs.status==='payroll_ready'?'b-green':latestTs.status==='submitted'?'b-amber':'b-gray'}">${TS_LABEL[latestTs.status]}</span>`:''}
+    </div>
+
+    ${!roster.length ? emptyState(T('noRoster'),'',T('addWorker'),()=>go('events')) : `
+    <div class="card">
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th style="position:sticky;inset-inline-start:0;background:var(--surface);z-index:2">${T('workerName')}</th>
+          ${days.map(dt=>`<th class="num" style="text-align:center">${fmtDate(dt).split(' ').slice(0,2).join(' ')}</th>`).join('')}
+          <th>${T('totalPayable')}</th></tr></thead>
+        <tbody>${roster.map(r=>{
+          const rec = attMap[r.id]||{};
+          const presentDays = Object.values(rec).filter(a=>a.status==='present').length;
+          return `<tr>
+            <td class="cell-strong" style="position:sticky;inset-inline-start:0;background:var(--surface)">${esc(r.worker_name)}
+              <div class="tiny muted">${esc(roleMap[r.role_id]?(LANG==='ar'?roleMap[r.role_id].name_ar:roleMap[r.role_id].name_en):'')}</div></td>
+            ${days.map(dt=>{
+              const a = rec[dt];
+              const st = a?a.status:null;
+              return `<td style="text-align:center">
+                <select class="inp att-select" data-roster="${r.id}" data-date="${dt}" data-rate="${r.daily_rate}"
+                  style="padding:4px 6px;font-size:11.5px;min-width:78px" ${locked?'disabled':''}>
+                  <option value="">—</option>
+                  ${Object.entries(ATT_LABEL()).map(([k,lbl])=>`<option value="${k}" ${st===k?'selected':''}>${lbl}</option>`).join('')}
+                </select></td>`;
+            }).join('')}
+            <td class="num cell-strong">${fmtMoney(presentDays*r.daily_rate)}</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table></div>
+    </div>
+    <div class="card card-pad">
+      <div class="row">
+        <div><div class="eyebrow">${T('totalPayable')}</div><div style="font-size:20px;font-weight:600" class="num">${fmtMoney(totalPayable)}</div></div>
+        <div class="spacer"></div>
+        ${!locked ? `<button class="btn btn-primary" id="tsSubmit">${T('submitTimesheet')}</button>` : ''}
+        ${latestTs && latestTs.status==='submitted' ? `<button class="btn" id="tsReview">${T('tsReviewed')}</button><button class="btn btn-primary" id="tsApprove">${T('approveTimesheet')}</button>` : ''}
+        ${latestTs && latestTs.status==='reviewed' ? `<button class="btn btn-primary" id="tsApprove">${T('approveTimesheet')}</button>` : ''}
+      </div>
+    </div>`}
+  </div>`;
+
+  $$('[data-tsphase]').forEach(b=>b.onclick=()=>{ S.cache.tsPhase=b.dataset.tsphase; render(); });
+
+  $$('.att-select').forEach(sel=>sel.onchange=async()=>{
+    const rosterId=sel.dataset.roster, date=sel.dataset.date, rate=Number(sel.dataset.rate), status=sel.value;
+    sel.disabled=true;
+    try{
+      const existing = attMap[rosterId]?.[date];
+      if(!status){
+        if(existing) await DB.remove('event_attendance', existing.id);
+      } else if(existing){
+        await DB.update('event_attendance', existing.id, {status, daily_rate:rate});
+      } else {
+        await DB.insert('event_attendance',{owner_id:S.profile.id, event_id:ev.id, phase_id:activePhaseId,
+          roster_id:rosterId, work_date:date, status, daily_rate:rate});
+      }
+      render();
+    }catch(e){ toast(e.message,'err'); sel.disabled=false; }
+  });
+
+  const submitBtn=$('#tsSubmit');
+  if(submitBtn) submitBtn.onclick=async()=>{
+    try{
+      await DB.rpc('submit_event_timesheet',{p_event_id:ev.id, p_phase_id:activePhaseId, p_period_start:phase.start_date, p_period_end:phase.end_date});
+      toast(T('savedOk'),'ok'); render();
+    }catch(e){ toast(e.message,'err'); }
+  };
+  const reviewBtn=$('#tsReview');
+  if(reviewBtn) reviewBtn.onclick=async()=>{
+    try{ await DB.rpc('set_timesheet_status',{p_timesheet_id:latestTs.id, p_status:'reviewed'}); toast(T('savedOk'),'ok'); render(); }
+    catch(e){ toast(e.message,'err'); }
+  };
+  const approveBtn=$('#tsApprove');
+  if(approveBtn) approveBtn.onclick=()=>Modal.confirm(T('approveTimesheet'), T('approveTimesheetWarning'),async()=>{
+    try{ await DB.rpc('set_timesheet_status',{p_timesheet_id:latestTs.id, p_status:'approved'}); toast(T('savedOk'),'ok'); render(); }
+    catch(e){ toast(e.message,'err'); }
+  });
+}
+</script>
+<script>
+
+
 /* ===================== GLOBAL TASKS ===================== */
 VIEWS.tasks = async (v)=>{
   topAction(`+ ${T('newTask')}`, ()=>taskTypeChooser());
