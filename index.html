@@ -505,7 +505,8 @@ const CFG = {
   AUTH_URL: 'https://ep-empty-cell-ay8l4nc2.neonauth.c-5.us-east-2.aws.neon.tech/neondb/auth',
   API_URL : 'https://ep-empty-cell-ay8l4nc2.apirest.c-5.us-east-2.aws.neon.tech/neondb/rest/v1',
   AI_FN   : '/.netlify/functions/assistant',
-  RESOLVE_LOGIN_FN : '/.netlify/functions/resolve-login'
+  RESOLVE_LOGIN_FN : '/.netlify/functions/resolve-login',
+  SUBMIT_APPLICANT_FN : '/.netlify/functions/submit-applicant'
 };
 
 /* ===================== I18N ===================== */
@@ -670,7 +671,21 @@ ar:{
   defaultDailyCost:'التكلفة الافتراضية', newRole:'دور جديد', newEquipment:'معدة جديدة',
   draft:'مسودة', planning:'تخطيط', pending_approval:'بانتظار الاعتماد', approved:'معتمد',
   upcoming:'قادمة', archived:'مؤرشفة',
-  approveTimesheetWarning:'سيُقفل تعديل الحضور بعد الاعتماد ولا يمكن التراجع.'
+  approveTimesheetWarning:'سيُقفل تعديل الحضور بعد الاعتماد ولا يمكن التراجع.',
+  talent:'المواهب', talentDb:'قاعدة المواهب', registrationLinks:'روابط التسجيل', newLink:'رابط جديد',
+  linkName:'اسم الرابط', copyLink:'نسخ الرابط', linkCopied:'تم نسخ الرابط', activateLink:'تفعيل',
+  deactivateLink:'إيقاف', expiresAt:'ينتهي في', maxApplications:'الحد الأقصى للطلبات',
+  applicationsCount:'عدد الطلبات', noLinks:'لا توجد روابط تسجيل', applicantName:'اسم المتقدم',
+  applicantStatus:'حالة المتقدم', new:'متقدم جديد', under_review:'قيد المراجعة',
+  contacted:'تم التواصل', interview_scheduled:'موعد مقابلة', interviewed:'تمت المقابلة',
+  accepted:'مقبول', rejected:'مرفوض', approved_worker:'عامل معتمد', blacklisted:'قائمة سوداء',
+  noApplicants:'لا يوجد متقدمون', duplicateWarning:'تنبيه تكرار', sameIdAs:'نفس الهوية لدى',
+  sameMobileAs:'نفس الجوال لدى', sameIbanAs:'نفس الآيبان لدى', viewProfile:'عرض الملف',
+  convertToWorker:'اعتماد كعامل فعاليات', idNumber:'رقم الهوية/الإقامة', mobile:'الجوال', iban:'الآيبان',
+  national_id:'هوية وطنية', iqama:'إقامة',
+  dateOfBirth:'تاريخ الميلاد', age:'العمر', noDuplicates:'لا توجد تكرارات مكتشفة',
+  eventsSettingsTitle:'إعدادات الفعاليات', manageRoles:'إدارة أدوار الطاقم', manageEquipment:'إدارة كتالوج المعدات',
+  managePhases:'إدارة قوالب المراحل', manageLocations:'إدارة المواقع'
 },
 en:{
   dir:'ltr',
@@ -816,7 +831,21 @@ en:{
   defaultDailyCost:'Default Cost', newRole:'New Role', newEquipment:'New Equipment',
   draft:'Draft', planning:'Planning', pending_approval:'Pending Approval', approved:'Approved',
   upcoming:'Upcoming', archived:'Archived',
-  approveTimesheetWarning:'Attendance will be locked for editing after approval and cannot be undone.'
+  approveTimesheetWarning:'Attendance will be locked for editing after approval and cannot be undone.',
+  talent:'Talent', talentDb:'Talent Database', registrationLinks:'Registration Links', newLink:'New Link',
+  linkName:'Link Name', copyLink:'Copy Link', linkCopied:'Link copied', activateLink:'Activate',
+  deactivateLink:'Deactivate', expiresAt:'Expires At', maxApplications:'Max Applications',
+  applicationsCount:'Applications', noLinks:'No registration links', applicantName:'Applicant Name',
+  applicantStatus:'Status', new:'New Applicant', under_review:'Under Review',
+  contacted:'Contacted', interview_scheduled:'Interview Scheduled', interviewed:'Interviewed',
+  accepted:'Accepted', rejected:'Rejected', approved_worker:'Approved Worker', blacklisted:'Blacklisted',
+  noApplicants:'No applicants yet', duplicateWarning:'Duplicate Warning', sameIdAs:'Same ID as',
+  sameMobileAs:'Same mobile as', sameIbanAs:'Same IBAN as', viewProfile:'View Profile',
+  convertToWorker:'Approve as Event Worker', idNumber:'ID / Iqama Number', mobile:'Mobile', iban:'IBAN',
+  national_id:'National ID', iqama:'Iqama',
+  dateOfBirth:'Date of Birth', age:'Age', noDuplicates:'No duplicates detected',
+  eventsSettingsTitle:'Events Settings', manageRoles:'Manage Manpower Roles', manageEquipment:'Manage Equipment Catalog',
+  managePhases:'Manage Phase Templates', manageLocations:'Manage Locations'
 }};
 
 let LANG = localStorage.getItem('kayan_lang') || 'ar';
@@ -1086,6 +1115,7 @@ const NAV = [
   ]},
   {sec:'navWork', items:[
     {k:'events',    icon:'M4 4h16v4H4zM4 8v12h16V8M9 12h6M9 16h4'},
+    {k:'talent',    icon:'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM19 8v6M22 11h-6'},
     {k:'projects',  icon:'M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z'},
     {k:'tasks',     icon:'M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01'},
     {k:'meetings',  icon:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2zM8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01'},
@@ -1097,7 +1127,8 @@ const NAV = [
     {k:'notifications', icon:'M12 22a2 2 0 002-2h-4a2 2 0 002 2zM18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8', badge:true},
     {k:'billing',       icon:'M2 8h20M2 8a2 2 0 012-2h16a2 2 0 012 2M2 8v9a2 2 0 002 2h16a2 2 0 002-2V8M6 15h4'},
     {k:'settings',      icon:'M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-1.8-.3 1.6 1.6 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.6 1.6 0 00-1-1.5 1.6 1.6 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.6 1.6 0 00.3-1.8 1.6 1.6 0 00-1.5-1H3a2 2 0 110-4h.1a1.6 1.6 0 001.5-1 1.6 1.6 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.6 1.6 0 001.8.3H9a1.6 1.6 0 001-1.5V3a2 2 0 114 0v.1a1.6 1.6 0 001 1.5 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8V9a1.6 1.6 0 001.5 1H21a2 2 0 110 4h-.1a1.6 1.6 0 00-1.5 1z'},
-    {k:'admin',         icon:'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8', admin:true}
+    {k:'admin',         icon:'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.9M16 3.1a4 4 0 010 7.8', admin:true},
+    {k:'eventsSettings', icon:'M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-1.8-.3 1.6 1.6 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.6 1.6 0 00-1-1.5 1.6 1.6 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.6 1.6 0 00.3-1.8 1.6 1.6 0 00-1.5-1H3a2 2 0 110-4h.1a1.6 1.6 0 001.5-1 1.6 1.6 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.6 1.6 0 001.8.3H9a1.6 1.6 0 001-1.5V3a2 2 0 114 0v.1a1.6 1.6 0 001 1.5 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8V9a1.6 1.6 0 001.5 1H21a2 2 0 110 4h-.1a1.6 1.6 0 00-1.5 1z', admin:true}
   ]}
 ];
 
@@ -3570,6 +3601,260 @@ function showTermsModal(){
     footer:`<button class="btn btn-primary" data-close>${T('close')}</button>`});
 }
 
+/* ===================== TALENT DATABASE ===================== */
+const TALENT_PIPELINE = ['new','under_review','contacted','interview_scheduled','interviewed','accepted','rejected','approved_worker','blacklisted'];
+
+VIEWS.talent = async (v)=>{
+  topAction(`+ ${T('newLink')}`, ()=>talentLinkForm());
+  const [applicants, dups, links] = await Promise.all([
+    DB.select('event_applicants','select=*&order=created_at.desc&limit=300'),
+    DB.select('v_applicant_duplicates','select=*'),
+    DB.select('event_registration_links','select=*&order=created_at.desc')
+  ]);
+  const dupMap = {};
+  dups.forEach(d=>{ (dupMap[d.applicant_id] ||= []).push(d); });
+
+  v.innerHTML = `<div class="stack">
+    <div class="card">
+      <div class="card-head"><h2 style="flex:1">${T('registrationLinks')}</h2></div>
+      <div class="card-pad">
+        ${links.length ? links.map(l=>{
+          const url = `${location.origin}${location.pathname}#/apply/${l.token}`;
+          const expired = l.expires_at && new Date(l.expires_at) < new Date();
+          return `<div class="list-item">
+            <div class="li-main"><div class="li-title">${esc(l.name)}</div>
+              <div class="li-sub">${badge(l.is_active&&!expired?'active':'disabled', l.is_active&&!expired?T('activeUsers'):T('disabledUsers'))}
+                <span>${l.applications_count}${l.max_applications?'/'+l.max_applications:''} ${T('applicationsCount')}</span>
+                ${l.expires_at?`<span>${T('expiresAt')}: ${fmtDate(l.expires_at)}</span>`:''}</div></div>
+            <button class="btn btn-sm" data-copylink="${url}">${T('copyLink')}</button>
+            <button class="btn btn-sm" data-togglelink="${l.id}" data-active="${l.is_active}">${l.is_active?T('deactivateLink'):T('activateLink')}</button>
+          </div>`;
+        }).join('') : `<p class="tiny muted" style="text-align:center;padding:14px 0">${T('noLinks')}</p>`}
+      </div>
+    </div>
+
+    <div class="row row-wrap">
+      <input class="inp" id="tlSearch" placeholder="${T('search')}…" style="max-width:240px">
+      <select class="inp" id="tlStatus" style="max-width:190px"><option value="">${T('allStatuses')}</option>
+        ${TALENT_PIPELINE.map(s=>`<option value="${s}">${T(s)}</option>`).join('')}</select>
+      <select class="inp" id="tlDup" style="max-width:170px"><option value="">${T('all')}</option>
+        <option value="dup">${T('duplicateWarning')}</option></select>
+    </div>
+    <div id="tlList" class="stack"></div>
+  </div>`;
+
+  $$('[data-copylink]').forEach(b=>b.onclick=()=>{
+    navigator.clipboard?.writeText(b.dataset.copylink).then(()=>toast(T('linkCopied'),'ok'));
+  });
+  $$('[data-togglelink]').forEach(b=>b.onclick=async()=>{
+    try{ await DB.update('event_registration_links', b.dataset.togglelink, {is_active: b.dataset.active!=='true'});
+      toast(T('savedOk'),'ok'); render(); }catch(e){ toast(e.message,'err'); }
+  });
+
+  const draw=()=>{
+    const q=$('#tlSearch').value.toLowerCase(), st=$('#tlStatus').value, dupOnly=$('#tlDup').value;
+    const rows = applicants.filter(a=>
+      (!q || (a.full_name_ar+' '+a.full_name_en+' '+a.mobile).toLowerCase().includes(q)) &&
+      (!st || a.status===st) && (!dupOnly || dupMap[a.id]));
+    $('#tlList').innerHTML = rows.length ? rows.map(a=>{
+      const dup = dupMap[a.id];
+      return `<div class="card card-pad" style="cursor:pointer" data-applicant="${a.id}">
+        <div class="row">
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:500">${esc(a.full_name_ar)} <span class="tiny muted">${esc(a.full_name_en)}</span></div>
+            <div class="li-sub">${esc(a.mobile)} · ${T(a.id_type==='iqama'?'iqama':'national_id')||a.id_type}</div>
+          </div>
+          ${dup?`<span class="badge b-rose">${T('duplicateWarning')}</span>`:''}
+          ${badge(a.status==='approved_worker'?'active':a.status==='rejected'||a.status==='blacklisted'?'disabled':'pending', T(a.status))}
+        </div>
+      </div>`;
+    }).join('') : `<p class="muted" style="text-align:center;padding:26px">${T('noApplicants')}</p>`;
+    $$('[data-applicant]').forEach(c=>c.onclick=()=>talentProfile(applicants.find(a=>a.id===c.dataset.applicant), dupMap[c.dataset.applicant]));
+  };
+  ['tlSearch','tlStatus','tlDup'].forEach(id=>{const e=$('#'+id); e.oninput=draw; e.onchange=draw;});
+  draw();
+};
+
+function talentLinkForm(){
+  Modal.open({slim:true, title:T('newLink'),
+    body:`${field('lkName',T('linkName'),'text','','required')}
+      <div class="grid-2">${field('lkExpiry',T('expiresAt'),'date')}${field('lkMax',T('maxApplications'),'number','','min="1"')}</div>`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="lkSave">${T('create')}</button>`});
+  $('#lkSave').onclick=async()=>{
+    const name=val('lkName'); if(!name) return toast(T('requiredField'),'err');
+    try{
+      await DB.insert('event_registration_links',{owner_id:S.profile.id, name,
+        expires_at:valOrNull('lkExpiry')?new Date(val('lkExpiry')+'T23:59:59').toISOString():null,
+        max_applications:val('lkMax')?Number(val('lkMax')):null});
+      Modal.close(); toast(T('savedOk'),'ok'); render();
+    }catch(e){ toast(e.message,'err'); }
+  };
+}
+
+function talentProfile(a, dups){
+  const dupHtml = (dups&&dups.length) ? `<div class="card card-pad" style="border-color:var(--rose-600);margin-bottom:14px">
+    <div class="badge b-rose" style="margin-bottom:8px">${T('duplicateWarning')}</div>
+    ${dups.map(d=>`<div class="tiny">${d.match_type==='id_number'?T('sameIdAs'):d.match_type==='mobile'?T('sameMobileAs'):T('sameIbanAs')}: <b>${esc(d.matched_name)}</b></div>`).join('')}
+    </div>` : '';
+  Modal.open({wide:true, title:a.full_name_ar,
+    body:`${dupHtml}
+      <div class="grid-2">
+        <div class="field"><label>${T('fullName')} (AR)</label><div>${esc(a.full_name_ar)}</div></div>
+        <div class="field"><label>${T('fullName')} (EN)</label><div>${esc(a.full_name_en)}</div></div>
+        <div class="field"><label>${T('dateOfBirth')}</label><div>${fmtDate(a.date_of_birth)}</div></div>
+        <div class="field"><label>${T('mobile')}</label><div class="num">${esc(a.mobile)}</div></div>
+        <div class="field"><label>${T('idNumber')}</label><div class="num">${esc(a.id_number)}</div></div>
+        <div class="field"><label>${T('iban')}</label><div class="num">${esc(a.iban)}</div></div>
+      </div>
+      <div class="row row-wrap" style="gap:14px;margin:14px 0">
+        ${a.photo_url?`<img src="${a.photo_url}" style="width:100px;height:100px;object-fit:cover;border-radius:10px;border:1px solid var(--line)">`:''}
+        ${a.iban_proof_url?`<img src="${a.iban_proof_url}" style="width:100px;height:100px;object-fit:cover;border-radius:10px;border:1px solid var(--line)">`:''}
+      </div>
+      <div class="field"><label>${T('applicantStatus')}</label>
+        <select class="inp" id="tpStatus">${TALENT_PIPELINE.map(s=>`<option value="${s}" ${s===a.status?'selected':''}>${T(s)}</option>`).join('')}</select></div>`,
+    footer:`<button class="btn" data-close>${T('close')}</button>
+      ${a.status!=='approved_worker'?`<button class="btn btn-primary" id="tpConvert">${T('convertToWorker')}</button>`:''}
+      <button class="btn btn-primary" id="tpSave">${T('save')}</button>`});
+  $('#tpSave').onclick=async()=>{
+    try{ await DB.update('event_applicants',a.id,{status:val('tpStatus')}); toast(T('savedOk'),'ok'); Modal.close(); render(); }
+    catch(e){ toast(e.message,'err'); }
+  };
+  const conv=$('#tpConvert');
+  if(conv) conv.onclick=async()=>{
+    try{ await DB.update('event_applicants',a.id,{status:'approved_worker'}); toast(T('savedOk'),'ok'); Modal.close(); render(); }
+    catch(e){ toast(e.message,'err'); }
+  };
+}
+
+/* ===================== EVENTS SETTINGS ===================== */
+VIEWS.eventsSettings = async (v)=>{
+  if(!S.profile.is_admin){ v.innerHTML=emptyState(T('noData'),''); return; }
+  const tab = S.cache.evSetTab || 'roles';
+  v.innerHTML = `<div class="stack">
+    <div class="tabs">
+      ${['roles','equipment','phases','locations'].map(t=>`<div class="tab ${tab===t?'on':''}" data-estab="${t}">${T(t==='roles'?'manpowerRoles':t==='equipment'?'equipmentCatalog':t==='phases'?'phaseTemplates':'locations')}</div>`).join('')}
+    </div>
+    <div id="esBody"><div class="loading"><div class="spin"></div></div></div>
+  </div>`;
+  $$('[data-estab]').forEach(t=>t.onclick=()=>{ S.cache.evSetTab=t.dataset.estab; render(); });
+  const body=$('#esBody');
+  if(tab==='roles') await esRoles(body);
+  else if(tab==='equipment') await esEquipment(body);
+  else if(tab==='phases') await esPhases(body);
+  else await esLocations(body);
+};
+
+async function esRoles(el){
+  const roles = await DB.select('event_roles','select=*&order=sort_order.asc');
+  el.innerHTML = `<div class="card"><div class="card-head"><h3 style="flex:1">${T('manpowerRoles')}</h3>
+    <button class="btn btn-sm btn-primary" id="esNewRole">+ ${T('newRole')}</button></div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>AR</th><th>EN</th><th>${T('defaultDailyCost')}</th><th>${T('defaultDailyRate')}</th><th>${T('status')}</th><th></th></tr></thead>
+      <tbody>${roles.map(r=>`<tr><td class="cell-strong">${esc(r.name_ar)}</td><td class="tiny">${esc(r.name_en)}</td>
+        <td class="num tiny">${fmtMoney(r.default_daily_cost)}</td><td class="num tiny">${fmtMoney(r.default_daily_rate)}</td>
+        <td>${badge(r.is_active?'active':'disabled', r.is_active?T('activeUsers'):T('disabledUsers'))}</td>
+        <td><button class="btn btn-ghost btn-sm" data-toggle-role="${r.id}" data-active="${r.is_active}">${r.is_active?T('disable'):T('activate')}</button></td></tr>`).join('')}
+      </tbody></table></div></div>`;
+  $('#esNewRole').onclick=()=>esRoleForm();
+  $$('[data-toggle-role]').forEach(b=>b.onclick=async()=>{
+    await DB.update('event_roles',b.dataset.toggleRole,{is_active:b.dataset.active!=='true'}); render();
+  });
+}
+function esRoleForm(){
+  Modal.open({title:T('newRole'),
+    body:`<div class="grid-2">${field('rNameAr','AR','text')}${field('rNameEn','EN','text')}</div>
+      <div class="grid-2">${field('rCost',T('defaultDailyCost'),'number','0','min="0" step="0.01"')}${field('rRate',T('defaultDailyRate'),'number','0','min="0" step="0.01"')}</div>`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="rSave">${T('create')}</button>`});
+  $('#rSave').onclick=async()=>{
+    try{ await DB.insert('event_roles',{owner_id:S.profile.id,name_ar:val('rNameAr'),name_en:val('rNameEn'),
+      default_daily_cost:Number(val('rCost')||0),default_daily_rate:Number(val('rRate')||0)});
+      Modal.close(); toast(T('savedOk'),'ok'); render(); }catch(e){ toast(e.message,'err'); }
+  };
+}
+
+async function esEquipment(el){
+  const cat = await DB.select('event_equipment_catalog','select=*&order=sort_order.asc');
+  el.innerHTML = `<div class="card"><div class="card-head"><h3 style="flex:1">${T('equipmentCatalog')}</h3>
+    <button class="btn btn-sm btn-primary" id="esNewEquip">+ ${T('newEquipment')}</button></div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>AR</th><th>EN</th><th>${T('pricingType')}</th><th>${T('unitCost')}</th><th>${T('unitPrice')}</th><th>${T('status')}</th><th></th></tr></thead>
+      <tbody>${cat.map(c=>`<tr><td class="cell-strong">${esc(c.name_ar)}</td><td class="tiny">${esc(c.name_en)}</td>
+        <td class="tiny">${T(c.pricing_type)}</td><td class="num tiny">${fmtMoney(c.default_cost)}</td><td class="num tiny">${fmtMoney(c.default_price)}</td>
+        <td>${badge(c.is_active?'active':'disabled', c.is_active?T('activeUsers'):T('disabledUsers'))}</td>
+        <td><button class="btn btn-ghost btn-sm" data-toggle-eq="${c.id}" data-active="${c.is_active}">${c.is_active?T('disable'):T('activate')}</button></td></tr>`).join('')}
+      </tbody></table></div></div>`;
+  $('#esNewEquip').onclick=()=>esEquipForm();
+  $$('[data-toggle-eq]').forEach(b=>b.onclick=async()=>{
+    await DB.update('event_equipment_catalog',b.dataset.toggleEq,{is_active:b.dataset.active!=='true'}); render();
+  });
+}
+function esEquipForm(){
+  Modal.open({title:T('newEquipment'),
+    body:`<div class="grid-2">${field('eNameAr','AR','text')}${field('eNameEn','EN','text')}</div>
+      <div class="grid-3">${selectField('ePricing',T('pricingType'),EOPT.pricing(),'per_day')}
+        ${field('eCost',T('unitCost'),'number','0','min="0" step="0.01"')}${field('ePrice',T('unitPrice'),'number','0','min="0" step="0.01"')}</div>`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="eSave">${T('create')}</button>`});
+  $('#eSave').onclick=async()=>{
+    try{ await DB.insert('event_equipment_catalog',{owner_id:S.profile.id,name_ar:val('eNameAr'),name_en:val('eNameEn'),
+      pricing_type:val('ePricing'),default_cost:Number(val('eCost')||0),default_price:Number(val('ePrice')||0)});
+      Modal.close(); toast(T('savedOk'),'ok'); render(); }catch(e){ toast(e.message,'err'); }
+  };
+}
+
+async function esPhases(el){
+  const templates = await DB.select('event_phase_templates','select=*&order=main_phase.asc,sort_order.asc');
+  el.innerHTML = `<div class="card"><div class="card-head"><h3 style="flex:1">${T('phaseTemplates')}</h3>
+    <button class="btn btn-sm btn-primary" id="esNewPhase">+ ${T('addSubPhase')}</button></div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>${T('mainPhasePre')}/${T('mainPhaseLive')}/${T('mainPhasePost')}</th><th>AR</th><th>EN</th><th>${T('status')}</th><th></th></tr></thead>
+      <tbody>${templates.map(t=>`<tr><td><span class="badge" style="background:${MAIN_PHASE_COLOR[t.main_phase]}22;color:${MAIN_PHASE_COLOR[t.main_phase]}">${MAIN_PHASE_LABEL(t.main_phase)}</span></td>
+        <td class="cell-strong">${esc(t.name_ar)}</td><td class="tiny">${esc(t.name_en)}</td>
+        <td>${badge(t.is_active?'active':'disabled', t.is_active?T('activeUsers'):T('disabledUsers'))}</td>
+        <td><button class="btn btn-ghost btn-sm" data-toggle-ph="${t.id}" data-active="${t.is_active}">${t.is_active?T('disable'):T('activate')}</button></td></tr>`).join('')}
+      </tbody></table></div></div>`;
+  $('#esNewPhase').onclick=()=>esPhaseForm();
+  $$('[data-toggle-ph]').forEach(b=>b.onclick=async()=>{
+    await DB.update('event_phase_templates',b.dataset.togglePh,{is_active:b.dataset.active!=='true'}); render();
+  });
+}
+function esPhaseForm(){
+  Modal.open({title:T('addSubPhase'),
+    body:`${selectField('tMain',T('mainPhasePre'),[{v:'pre_event',t:T('mainPhasePre')},{v:'live_event',t:T('mainPhaseLive')},{v:'post_event',t:T('mainPhasePost')}])}
+      <div class="grid-2">${field('tNameAr','AR','text')}${field('tNameEn','EN','text')}</div>`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="tSave">${T('create')}</button>`});
+  $('#tSave').onclick=async()=>{
+    try{ await DB.insert('event_phase_templates',{owner_id:S.profile.id,main_phase:val('tMain'),name_ar:val('tNameAr'),name_en:val('tNameEn')});
+      Modal.close(); toast(T('savedOk'),'ok'); render(); }catch(e){ toast(e.message,'err'); }
+  };
+}
+
+async function esLocations(el){
+  const [countries, cities] = await Promise.all([
+    DB.select('event_countries','select=*&order=sort_order.asc'),
+    DB.select('event_cities','select=*&order=sort_order.asc')
+  ]);
+  el.innerHTML = `<div class="stack">${countries.map(co=>{
+    const cs = cities.filter(c=>c.country_id===co.id);
+    return `<div class="card">
+      <div class="card-head"><span class="chip">${esc(LANG==='ar'?co.name_ar:co.name_en)}</span>
+        <h3 style="flex:1"></h3><button class="btn btn-sm" data-addcity="${co.id}">+ ${T('city')}</button></div>
+      <div class="card-pad" style="display:flex;flex-wrap:wrap;gap:8px">
+        ${cs.map(c=>`<span class="chip" style="${c.is_active?'':'opacity:.45'}">${esc(LANG==='ar'?c.name_ar:c.name_en)}
+          <button data-toggle-city="${c.id}" data-active="${c.is_active}" style="border:0;background:none;cursor:pointer;margin-inline-start:4px">${c.is_active?'✕':'↺'}</button></span>`).join('')}
+      </div></div>`;
+  }).join('')}</div>`;
+  $$('[data-addcity]').forEach(b=>b.onclick=()=>esCityForm(b.dataset.addcity));
+  $$('[data-toggle-city]').forEach(b=>b.onclick=async()=>{
+    await DB.update('event_cities',b.dataset.toggleCity,{is_active:b.dataset.active!=='true'}); render();
+  });
+}
+function esCityForm(countryId){
+  Modal.open({slim:true, title:T('city'),
+    body:`<div class="grid-2">${field('cNameAr','AR','text')}${field('cNameEn','EN','text')}</div>`,
+    footer:`<button class="btn" data-close>${T('cancel')}</button><button class="btn btn-primary" id="cSave">${T('create')}</button>`});
+  $('#cSave').onclick=async()=>{
+    try{ await DB.insert('event_cities',{owner_id:S.profile.id,country_id:countryId,name_ar:val('cNameAr'),name_en:val('cNameEn')});
+      Modal.close(); toast(T('savedOk'),'ok'); render(); }catch(e){ toast(e.message,'err'); }
+  };
+}
+
 VIEWS.admin = async (v)=>{
   if(!S.profile.is_admin){ v.innerHTML=emptyState(T('noData'),''); return; }
   const [stats, users, subs] = await Promise.all([
@@ -3916,9 +4201,129 @@ $('#aiX').onclick=()=>AI.close();
 $('#aiClear').onclick=()=>AI.clear();
 $('#aiSend').onclick=()=>AI.send();
 $('#aiInput').onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); AI.send(); } };
+</script>
+<script>
+/* ===================== PUBLIC APPLICATION FORM (no auth) ===================== */
+async function compressImage(file, maxW=800, quality=0.65){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();
+    const reader=new FileReader();
+    reader.onload=()=>{ img.onload=()=>{
+      const scale=Math.min(1, maxW/img.width);
+      const canvas=document.createElement('canvas');
+      canvas.width=img.width*scale; canvas.height=img.height*scale;
+      canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    }; img.onerror=reject; img.src=reader.result; };
+    reader.onerror=reject; reader.readAsDataURL(file);
+  });
+}
+function calcAge(dobStr){
+  if(!dobStr) return 0;
+  const d=new Date(dobStr), n=new Date();
+  let a=n.getFullYear()-d.getFullYear();
+  if(n.getMonth()<d.getMonth()||(n.getMonth()===d.getMonth()&&n.getDate()<d.getDate())) a--;
+  return a;
+}
+function renderPublicApplicationForm(){
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('appScreen').classList.remove('on');
+  const token = location.hash.replace('#/apply/','').split('/')[0];
+  const wrap = document.createElement('div');
+  wrap.id = 'publicApplyScreen';
+  wrap.style.cssText = 'min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px;background:var(--bg)';
+  wrap.innerHTML = `
+    <div style="width:100%;max-width:520px">
+      <div class="row" style="justify-content:center;margin-bottom:20px">
+        <img src="${document.querySelector('.brand-glyph')?.src||''}" style="width:40px;height:40px;border-radius:10px;background:#fff;padding:3px">
+        <h1 style="font-size:19px">ProjectHub</h1>
+      </div>
+      <div class="card card-pad" id="paBody"><div class="loading"><div class="spin"></div></div></div>
+    </div>`;
+  document.body.appendChild(wrap);
+  paDraw(token);
+}
+function paField(id,label,type='text',extra=''){
+  return `<div class="field"><label>${esc(label)}</label><input class="inp" id="${id}" type="${type}" ${extra}></div>`;
+}
+function paDraw(token){
+  const body = document.getElementById('paBody');
+  body.innerHTML = `
+    <h2 style="margin-bottom:4px">${LANG==='ar'?'تسجيل المتقدمين للفعاليات الأمنية':'Event Security Workforce Registration'}</h2>
+    <p class="tiny muted" style="margin-bottom:18px">${LANG==='ar'?'جميع الحقول والمرفقات إلزامية.':'All fields and attachments are required.'}</p>
+    <div id="paForm">
+      ${paField('paNameAr', LANG==='ar'?'الاسم الرباعي بالعربية':'Full Name (Arabic)')}
+      ${paField('paNameEn', LANG==='ar'?'الاسم الرباعي بالإنجليزية':'Full Name (English)')}
+      ${paField('paDob', LANG==='ar'?'تاريخ الميلاد':'Date of Birth','date')}
+      ${paField('paMobile', LANG==='ar'?'رقم الجوال':'Mobile Number','tel')}
+      <div class="field"><label>${LANG==='ar'?'نوع الهوية':'ID Type'}</label>
+        <select class="inp" id="paIdType">
+          <option value="national_id">${LANG==='ar'?'هوية وطنية':'Saudi National ID'}</option>
+          <option value="iqama">${LANG==='ar'?'إقامة':'Iqama'}</option>
+        </select></div>
+      ${paField('paIdNumber', LANG==='ar'?'رقم الهوية/الإقامة':'ID / Iqama Number')}
+      <div id="paIqamaFields" class="hide">
+        <div class="field"><label>${LANG==='ar'?'حالة الإقامة':'Iqama Status'}</label>
+          <select class="inp" id="paIqamaStatus"><option value="valid">${LANG==='ar'?'سارية':'Valid'}</option><option value="expired">${LANG==='ar'?'منتهية':'Expired'}</option></select></div>
+        ${paField('paIqamaExpiry', LANG==='ar'?'تاريخ انتهاء الإقامة':'Iqama Expiry','date')}
+      </div>
+      ${paField('paIban', LANG==='ar'?'رقم الآيبان':'Bank IBAN')}
+      <div class="field"><label>${LANG==='ar'?'صورة شخصية (خلفية بيضاء)':'Personal Photo (white background)'}</label>
+        <input class="inp" id="paPhoto" type="file" accept="image/*"></div>
+      <div class="field"><label>${LANG==='ar'?'إثبات الآيبان':'IBAN Proof'}</label>
+        <input class="inp" id="paIbanProof" type="file" accept="image/*"></div>
+      <button class="btn btn-primary btn-block" id="paSubmit">${LANG==='ar'?'إرسال الطلب':'Submit Application'}</button>
+      <p class="tiny muted" id="paErr" style="color:var(--rose-600);margin-top:8px"></p>
+    </div>`;
+  document.getElementById('paIdType').onchange = e=>{
+    document.getElementById('paIqamaFields').classList.toggle('hide', e.target.value!=='iqama');
+  };
+  document.getElementById('paSubmit').onclick = ()=>paSubmit(token);
+}
+async function paSubmit(token){
+  const err = document.getElementById('paErr');
+  const g = id => document.getElementById(id);
+  err.textContent='';
+  const dob = g('paDob').value;
+  const req = {
+    fullNameAr: g('paNameAr').value.trim(), fullNameEn: g('paNameEn').value.trim(),
+    dob, mobile: g('paMobile').value.trim(), idType: g('paIdType').value,
+    idNumber: g('paIdNumber').value.trim(), iban: g('paIban').value.trim()
+  };
+  for(const k in req){ if(!req[k]){ err.textContent = LANG==='ar'?'جميع الحقول مطلوبة.':'All fields are required.'; return; } }
+  if(calcAge(dob) < 18){ err.textContent = LANG==='ar'?'يجب أن يكون عمر المتقدم 18 سنة فأكثر.':'Applicant must be at least 18 years old.'; return; }
+  const photoFile = g('paPhoto').files[0], ibanFile = g('paIbanProof').files[0];
+  if(!photoFile || !ibanFile){ err.textContent = LANG==='ar'?'الصورة الشخصية وإثبات الآيبان إلزاميان.':'Personal photo and IBAN proof are both required.'; return; }
+
+  const btn = document.getElementById('paSubmit');
+  btn.disabled=true; const old=btn.textContent; btn.textContent='…';
+  try{
+    const [photo, ibanProof] = await Promise.all([compressImage(photoFile), compressImage(ibanFile)]);
+    if(req.idType==='iqama'){ req.iqamaStatus=g('paIqamaStatus').value; req.iqamaExpiry=g('paIqamaExpiry').value||null; }
+    const r = await fetch(CFG.SUBMIT_APPLICANT_FN, {method:'POST',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({token, ...req, photo, ibanProof})});
+    const data = await r.json().catch(()=>({}));
+    if(!r.ok){
+      const map = {link_not_found:'الرابط غير صحيح.', link_inactive:'الرابط غير مفعّل حاليًا.', link_expired:'انتهت صلاحية هذا الرابط.',
+        link_full:'اكتمل عدد الطلبات المسموح لهذا الرابط.', under_18:'يجب أن يكون العمر 18 سنة فأكثر.'};
+      err.textContent = LANG==='ar' ? (map[data.error]||'تعذّر إرسال الطلب، حاول مرة أخرى.') : (data.error||'Could not submit. Please try again.');
+      btn.disabled=false; btn.textContent=old; return;
+    }
+    document.getElementById('paBody').innerHTML = `
+      <div style="text-align:center;padding:20px 0">
+        <div class="pending-glyph" style="background:var(--green-050);color:var(--green-600)">✓</div>
+        <h2 style="margin-top:14px">${LANG==='ar'?'تم إرسال طلبك بنجاح':'Application Submitted'}</h2>
+        <p class="muted" style="margin-top:8px">${LANG==='ar'?'سيتم التواصل معك في حال القبول.':"We'll contact you if your application is accepted."}</p>
+      </div>`;
+  }catch(e){
+    err.textContent = LANG==='ar'?'تعذّر الاتصال بالخادم.':'Could not reach the server.';
+    btn.disabled=false; btn.textContent=old;
+  }
+}
 
 applyLang();
-boot();
+if(location.hash.startsWith('#/apply/')) renderPublicApplicationForm();
+else boot();
 </script>
 </body>
 </html>
